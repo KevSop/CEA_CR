@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="MenuManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+	<alias>
+		<typeAlias alias="MenuManage" assembly="DataAccess.dll" type="DataAccess.Domain.MenuManage" />
+	</alias>
+	<resultMaps>
+		<resultMap id="MenuManageResult" class="MenuManage">
+			<result property="Id" column="ID" type="long" dbType="long"/>
+			<result property="MenuNo" column="MenuNo" type="string" dbType="varchar"/>
+			<result property="MenuName" column="MenuName" type="string" dbType="varchar"/>
+			<result property="MenuType" column="MenuType" type="string" dbType="varchar"/>
+			<result property="BigType" column="BigType" type="string" dbType="varchar"/>
+			<result property="MiddleType" column="MiddleType" type="string" dbType="varchar"/>
+			<result property="SmallType" column="SmallType" type="string" dbType="varchar"/>
+			<result property="SalePrice" column="SalePrice" type="single" dbType="Real"/>
+			<result property="Cost" column="Cost" type="single" dbType="Real"/>
+			<result property="SaleUnit" column="SaleUnit" type="string" dbType="varchar"/>
+			<result property="HelpRememberCode" column="HelpRememberCode" type="string" dbType="varchar"/>
+			<result property="TwoDimensionalCode" column="TwoDimensionalCode" type="string" dbType="varchar"/>
+			<result property="BarCode" column="BarCode" type="string" dbType="varchar"/>
+			<result property="Set1" column="Set1" type="string" dbType="varchar"/>
+			<result property="Set1Value" column="Set1Value" type="string" dbType="varchar"/>
+			<result property="Set2" column="Set2" type="string" dbType="varchar"/>
+			<result property="Set2Value" column="Set2Value" type="string" dbType="varchar"/>
+			<result property="Set3" column="Set3" type="string" dbType="varchar"/>
+			<result property="Set3Value" column="Set3Value" type="string" dbType="varchar"/>
+			<result property="Set4" column="Set4" type="string" dbType="varchar"/>
+			<result property="Set4Value" column="Set4Value" type="string" dbType="varchar"/>
+			<result property="IsHot" column="IsHot" type="long" dbType="long"/>
+			<result property="HotLevel" column="HotLevel" type="string" dbType="varchar"/>
+			<result property="MenuStyle" column="MenuStyle" type="string" dbType="varchar"/>
+			<result property="MenuCharacteristic" column="MenuCharacteristic" type="string" dbType="varchar"/>
+			<result property="DishType" column="DishType" type="string" dbType="varchar"/>
+			<result property="Image" column="Image" type="Byte" dbType="Binary"/>
+			<result property="IsValidate" column="IsValidate" type="long" dbType="long"/>
+			<result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+			<result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+			<result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+			<result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+		</resultMap>
+	</resultMaps>
+	<statements>
+		<select id="SelectBarCode" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isParameterPresent>
+					BarCode = #value#
+				</isParameterPresent>
+			</dynamic>
+		</select>
+		<select id="DataCountForMenuManage" parameterClass="string">
+			select count(0) from MenuManage where MenuType=#value# and IsValidate=1
+		</select>
+		<select id="SelectMenuManageByType" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage where MenuType=#value# and IsValidate=1
+		</select>
+		<select id="SelectMenuManage" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,IsValidate as IsValidate,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isParameterPresent>
+					ID = #value#
+				</isParameterPresent>
+			</dynamic>
+		</select>
+		<select id="MenuManageInfoList" parameterClass="Hashtable" resultClass="MenuManage">
+			SELECT MenuNo AS MenuNo,MenuName AS MenuName FROM MenuManage
+			<dynamic prepend=" WHERE ">
+				<isNotEmpty prepend="and" property="BType">
+					BigType= #BType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="MType">
+					MiddleType= #MType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="SType">
+					SmallType= #SType#
+				</isNotEmpty>
+			</dynamic>
+		</select>
+		<select id="IsExitsSelectMenuManage" parameterClass="Hashtable" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,
+			SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,
+			TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,
+			Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,
+			MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,
+			CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend=" WHERE ">
+				<isNotEmpty prepend="and" property="bigType">
+					BigType= #bigType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="middleType">
+					MiddleType= #middleType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="smallType">
+					SmallType= #smallType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set1">
+					Set1= #set1#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set2">
+					Set2= #set2#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set3">
+					Set3= #set3#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set4">
+					Set4= #set4#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="hotLevel">
+					HotLevel= #hotLevel#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="menuStyle">
+					MenuStyle= #menuStyle#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="menuCharacteristic">
+					MenuCharacteristic=# menuCharacteristic#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="dishType">
+					DishType=#dishType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set1Value">
+					Set1Value=#set1Value#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set2Value">
+					Set2Value=#set2Value#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set3Value">
+					Set3Value=#set3Value#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="set4Value">
+					Set4Value=#set4Value#
+				</isNotEmpty>
+			</dynamic>
+		</select>
+
+		<select id="SelectMenuNoManage" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isParameterPresent>
+					MenuNo = #value#
+				</isParameterPresent>
+			</dynamic>
+		</select>
+
+		<select id="SelectMenuManage1" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,(select Text from FieldValue where KEY='MenuType' AND Value=MenuManage.MenuType)
+			AS MenuType,(select Text from FieldValue where KEY='BigType' AND Value=MenuManage.BigType)
+			as BigType,
+			(select Text from FieldValue where KEY='MiddleType' AND Value=MenuManage.MiddleType) as MiddleType ,
+			(select Text from FieldValue where KEY='SmallType' AND Value=MenuManage.SmallType) as SmallType ,
+			SalePrice AS SalePrice,Cost AS Cost,
+			(select Text from FieldValue where KEY='Unit' AND Value=MenuManage.SaleUnit) as SaleUnit ,
+			HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS
+			TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS
+			Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value
+			AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel
+			AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS
+			MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS
+			IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS
+			UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isParameterPresent>
+					ID = #value#
+				</isParameterPresent>
+			</dynamic>
+		</select>
+
+		<select id="SelectMenuManage2" parameterClass="Hashtable" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,(select Text from FieldValue where KEY='MenuType' AND Value=MenuManage.MenuType)
+			AS MenuType,(select Text from FieldValue where KEY='BigType' AND Value=MenuManage.BigType)
+			as BigType,
+			(select Text from FieldValue where KEY='MiddleType' AND Value=MenuManage.MiddleType) as MiddleType ,
+			(select Text from FieldValue where KEY='SmallType' AND Value=MenuManage.SmallType) as SmallType ,
+			SalePrice AS SalePrice,Cost AS Cost,
+			(select Text from FieldValue where KEY='Unit' AND Value=MenuManage.SaleUnit) as SaleUnit ,
+			HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS
+			TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS
+			Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value
+			AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel
+			AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS
+			MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS
+			IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS
+			UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="BigType">
+					BigType= #BigType#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="MiddleType">
+					MiddleType= #MiddleType#
+				</isNotEmpty>
+			</dynamic>
+		</select>
+
+    <select id="SelectMenuManageSetMeal" parameterClass="Hashtable" resultClass="MenuManage">
+      SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,(select Text from FieldValue where KEY='MenuType' AND Value=MenuManage.MenuType)
+      AS MenuType,(select Text from FieldValue where KEY='BigType' AND Value=MenuManage.BigType)
+      as BigType,
+      (select Text from FieldValue where KEY='MiddleType' AND Value=MenuManage.MiddleType) as MiddleType ,
+      (select Text from FieldValue where KEY='SmallType' AND Value=MenuManage.SmallType) as SmallType ,
+      SalePrice AS SalePrice,Cost AS Cost,
+      (select Text from FieldValue where KEY='Unit' AND Value=MenuManage.SaleUnit) as SaleUnit ,
+      HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS
+      TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS
+      Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value
+      AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel
+      AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS
+      MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS
+      IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS
+      UpdUser,UpdTime AS UpdTime
+      FROM MenuManage where MenuType&lt;&gt;7
+        <isNotEmpty prepend="and" property="BigType">
+          BigType= #BigType#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="MiddleType">
+          MiddleType= #MiddleType#
+        </isNotEmpty>
+     </select>
+    
+		<!--统计本月-->
+		<select id="SelectTicket1" parameterClass="string" resultClass="Hashtable">
+      select  ifnull(sum(SendCount),0) as SendCount  from (select max(pay.OwnerTime) OwnerTime,detali.OrdersNo,
+      detali.MenuCode,detali.MenuCode,detali.MenuPrice,
+      detali.SendCount,master.PayStatus,OrdersStatus from OrdersListManage master inner join OrdersDetail detali
+      on master.OrdersNo=detali.OrdersNo inner join PayManage pay on master.OrdersNo=pay.OrdersNo  where master.PayStatus=3 and master.OrdersStatus=4
+      and pay.PayType=1
+      <dynamic prepend="and">
+     <isParameterPresent>
+       MenuCode = #value#
+     </isParameterPresent>
+      </dynamic>
+      Group by detali.OrdersNo,detali.MenuCode,detali.MenuCode,detali.MenuPrice,detali.SendCount,PayStatus,OrdersStatus
+      ) Ticket where   OwnerTime between datetime('now','start of month','+1 second')
+      and      datetime('now','start of month','+1 month','-1 second')
+      
+		</select>
+
+		<!--统计本周-->
+		<select id="SelectTicket2" parameterClass="string" resultClass="Hashtable">
+      select   ifnull(sum(SendCount),0) as SendCount  from (select max(pay.OwnerTime) OwnerTime,detali.OrdersNo,detali.MenuCode,detali.MenuCode,detali.MenuPrice,
+      detali.SendCount,master.PayStatus,OrdersStatus from OrdersListManage master inner join OrdersDetail detali
+      on master.OrdersNo=detali.OrdersNo inner join PayManage pay on master.OrdersNo=pay.OrdersNo  where master.PayStatus=3 and master.OrdersStatus=4 and pay.PayType=1
+      Group by detali.OrdersNo,detali.MenuCode,detali.MenuCode,detali.MenuPrice,detali.SendCount,PayStatus,OrdersStatus
+      ) Ticket where   OwnerTime between datetime(date(datetime('now',strftime('-%w day','now'))),'+1 second')
+      and datetime(date(datetime('now',(6 - strftime('%w day','now'))||' day','1 day')),'-1 second')
+      <dynamic prepend="and">
+        <isParameterPresent>
+          MenuCode = #value#
+        </isParameterPresent>
+      </dynamic>
+		</select>
+
+		<!--统计本年-->
+		<select id="SelectTicket3" parameterClass="string" resultClass="Hashtable">
+			select ifnull(sum(SendCount),0) as SendCount from (select max(pay.OwnerTime) OwnerTime,detali.OrdersNo,detali.MenuCode,detali.MenuCode,detali.MenuPrice,
+			detali.SendCount,master.PayStatus,OrdersStatus from OrdersListManage master inner join OrdersDetail detali
+			on master.OrdersNo=detali.OrdersNo inner join PayManage pay on master.OrdersNo=pay.OrdersNo where master.PayStatus=3 and master.OrdersStatus=4 and pay.PayType=1
+			Group by detali.OrdersNo,detali.MenuCode,detali.MenuCode,detali.MenuPrice,detali.SendCount,PayStatus,OrdersStatus
+			) Ticket where  datetime(OwnerTime) >=datetime('now','start of year') and
+			datetime(OwnerTime)  &lt; date('now','start of year','+1 year')
+      <dynamic prepend="and">
+        <isParameterPresent>
+          MenuCode = #value#
+        </isParameterPresent>
+      </dynamic>
+		</select>
+
+		<insert id="InsertMenuManage" parameterClass="MenuManage">
+			INSERT INTO MenuManage
+			(MenuNo,MenuName,MenuType,BigType,MiddleType,SmallType,SalePrice,Cost,SaleUnit,HelpRememberCode,TwoDimensionalCode,BarCode,Set1,Set1Value,Set2,Set2Value,Set3,Set3Value,Set4,Set4Value,IsHot,HotLevel,MenuStyle,MenuCharacteristic,DishType,Image,IsValidate,CreateUser,CreateTime,UpdUser,UpdTime)
+			VALUES(#MenuNo#,#MenuName#,#MenuType#,#BigType#,#MiddleType#,#SmallType#,#SalePrice#,#Cost#,#SaleUnit#,#HelpRememberCode#,#TwoDimensionalCode#,#BarCode#,#Set1#,#Set1Value#,#Set2#,#Set2Value#,#Set3#,#Set3Value#,#Set4#,#Set4Value#,#IsHot#,#HotLevel#,#MenuStyle#,#MenuCharacteristic#,#DishType#,#Image#,#IsValidate#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+			<selectKey resultClass="long" type="post" property="Id">
+				SELECT LAST_INSERT_ROWID() as value
+			</selectKey>
+		</insert>
+		<update id="UpdateMenuManage" parameterClass="MenuManage">
+			UPDATE MenuManage
+			SET MenuNo=#MenuNo#,MenuName=#MenuName#,MenuType=#MenuType#,BigType=#BigType#,MiddleType=#MiddleType#,SmallType=#SmallType#,SalePrice=#SalePrice#,Cost=#Cost#,SaleUnit=#SaleUnit#,HelpRememberCode=#HelpRememberCode#,TwoDimensionalCode=#TwoDimensionalCode#,BarCode=#BarCode#,Set1=#Set1#,Set1Value=#Set1Value#,Set2=#Set2#,Set2Value=#Set2Value#,Set3=#Set3#,Set3Value=#Set3Value#,Set4=#Set4#,Set4Value=#Set4Value#,IsHot=#IsHot#,HotLevel=#HotLevel#,MenuStyle=#MenuStyle#,MenuCharacteristic=#MenuCharacteristic#,DishType=#DishType#,Image=#Image#,IsValidate=#IsValidate#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+			WHERE ID = #Id#
+		</update>
+		<delete id="DeleteMenuManage" parameterClass="string">
+			DELETE FROM MenuManage
+			WHERE ID = #value#
+		</delete>
+
+		<select id="SelectMenuManagediscount" parameterClass="string" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,
+			SalePrice AS SalePrice,Cost AS Cost,
+			(select Text from FieldValue where KEY='Unit' AND Value=MenuManage.SaleUnit) as SaleUnit
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isParameterPresent>
+					MenuNo = #value#
+				</isParameterPresent>
+			</dynamic>
+		</select>
+
+		<select id="SelectMenuManageSole" parameterClass="Hashtable" resultClass="MenuManage">
+			SELECT ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+			FROM MenuManage
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="and" property="HelpRememberCode">
+					HelpRememberCode= #HelpRememberCode#
+				</isNotEmpty>
+
+				<isNotEmpty prepend="and" property="TwoDimensionalCode">
+					TwoDimensionalCode= #TwoDimensionalCode#
+				</isNotEmpty>
+
+				<isNotEmpty prepend="and" property="BarCode">
+					BarCode= #BarCode#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="Id">
+					Id != #Id#
+				</isNotEmpty>
+			</dynamic>
+		</select>
+
+		<select id="SelectPKDByNo1" parameterClass="string" resultClass="Hashtable">
+			select  MenuManage.ID,MenuManage.MenuNo,MenuName,MenuType,BigType,MiddleType,SmallType,SalePrice,SaleUnit,Cost,HelpRememberCode,TwoDimensionalCode,BarCode,PackageDetail.MenuCount,PackageNo,DetailNo  from MenuManage join PackageDetail on MenuManage.MenuNo=PackageDetail.MenuNo where PackageDetail.PackageNo=#value#
+		</select>
+		<select id="SelectCI" parameterClass="string" resultClass="Hashtable">
+			select MenuManage.ID AS Id,MenuNo AS MenuNo,MenuName AS MenuName,MenuType AS MenuType,BigType AS BigType,MiddleType AS MiddleType,SmallType AS SmallType,SalePrice AS SalePrice,Cost AS Cost,SaleUnit AS SaleUnit,HelpRememberCode AS HelpRememberCode,TwoDimensionalCode AS TwoDimensionalCode,BarCode AS BarCode,Set1 AS Set1,Set1Value AS Set1Value,Set2 AS Set2,Set2Value AS Set2Value,Set3 AS Set3,Set3Value AS Set3Value,Set4 AS Set4,Set4Value AS Set4Value,IsHot AS IsHot,HotLevel AS HotLevel,MenuStyle AS MenuStyle,MenuCharacteristic AS MenuCharacteristic,DishType AS DishType,Image AS Image,IsValidate AS IsValidate,MenuCount as MenuCount from MenuManage join MenuReplace on MenuNo=ReplaceNo where DetailNo=#value#
+		</select>
+	</statements>
+</sqlMap>

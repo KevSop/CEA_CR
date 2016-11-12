@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="UserPowerMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="UserPower" assembly="DataAccess.dll" type="DataAccess.Domain.UserPower" />
+  </alias>
+  <resultMaps>
+    <resultMap id="UserPowerResult" class="UserPower">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="UserNo" column="UserNo" type="string" dbType="varchar"/>
+      <result property="DepartmentNo" column="DepartmentNo" type="string" dbType="varchar"/>
+      <result property="ModuleNo" column="ModuleNo" type="string" dbType="varchar"/>
+      <result property="IsValidate" column="IsValidate" type="long" dbType="long"/>
+      <result property="CanAdd" column="CanAdd" type="long" dbType="long"/>
+      <result property="CanUpd" column="CanUpd" type="long" dbType="long"/>
+      <result property="CanDel" column="CanDel" type="long" dbType="long"/>
+      <result property="CanSelect" column="CanSelect" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectUserPower" parameterClass="string" resultClass="UserPower">
+      SELECT ID AS Id,UserNo AS UserNo,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserPower
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectDeparUserPower" parameterClass="string" resultClass="UserPower">
+      SELECT ID AS Id,UserNo AS UserNo,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserPower
+
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          DepartmentNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelecNotUserPower" parameterClass="string" resultClass="UserPower">
+      select a.ID AS Id,a.UserNo AS UserNo,a.DepartmentNo AS DepartmentNo,a.ModuleNo AS ModuleNo,
+      case  when IsValidate=1 and IsValidate1=1 then '1' else '0' END  AS IsValidate,
+      case  when CanAdd=1 and CanAdd1=1 then '1' else '0' END  AS CanAdd,
+      case  when CanUpd=1 and CanUpd1=1 THEN '1' else '0' END  as CanUpd,
+      case  when CanDel=1 and CanDel1=1 then '1' else '0' END  AS CanDel,
+      case  when CanSelect=1 and CanSelect1=1 then '1' else '0' END  AS CanSelect,
+
+      a.CreateUser AS CreateUser,a.CreateTime AS CreateTime,a.UpdUser
+      AS UpdUser,a.UpdTime AS UpdTime
+      FROM
+      ( SELECT  a.*,b.IsValidate as IsValidate1 ,b.CanAdd as CanAdd1,b.CanUpd as CanUpd1,b.CanDel as CanDel1,b.CanSelect as CanSelect1
+      FROM UserPower a inner join   DepartmentPower b
+      on a.DepartmentNo=b.DepartmentNo and a.ModuleNo=b.ModuleNo
+
+      ) a
+
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          a.UserNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <select id="SelecStrUserPower" parameterClass="Hashtable" resultClass="UserPower">
+      SELECT ID AS Id,UserNo AS UserNo,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserPower
+        <dynamic prepend=" WHERE ">
+          <isNotEmpty prepend="and" property="UID">
+            UserNo= #UID#
+          </isNotEmpty>
+          <isNotEmpty prepend="and" property="DepNo">
+            DepartmentNo= #DepNo#
+          </isNotEmpty>
+          <isNotEmpty prepend="and" property="MNo">
+            ModuleNo= #MNo#
+          </isNotEmpty>
+        </dynamic>
+    </select>
+    <insert id="InsertUserPower" parameterClass="UserPower">
+      INSERT INTO UserPower
+      (UserNo,DepartmentNo,ModuleNo,IsValidate,CanAdd,CanUpd,CanDel,CanSelect,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#UserNo#,#DepartmentNo#,#ModuleNo#,#IsValidate#,#CanAdd#,#CanUpd#,#CanDel#,#CanSelect#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateUserPower" parameterClass="UserPower">
+      UPDATE UserPower
+      SET UserNo=#UserNo#,DepartmentNo=#DepartmentNo#,ModuleNo=#ModuleNo#,IsValidate=#IsValidate#,CanAdd=#CanAdd#,CanUpd=#CanUpd#,CanDel=#CanDel#,CanSelect=#CanSelect#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteUserPower" parameterClass="string">
+      DELETE FROM UserPower
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="OrderManageMap"  xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="OrderManage" assembly="DataAccess.dll" type="DataAccess.Domain.OrderManage" />
+    <typeAlias alias="V_OrderManage" assembly="DataAccess.Models.dll" type="DataAccess.Models.V_OrderManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="OrderManageResult" class="OrderManage">
+      <result property="ComId" column="com_ID" type="long" dbType="long"/>
+      <result property="OrderNo" column="OrderNo" type="string" dbType="varchar"/>
+      <result property="ConsumerNo" column="ConsumerNo" type="string" dbType="varchar"/>
+      <result property="OrderDate" column="OrderDate" type="string" dbType="varchar"/>
+      <result property="ReachTime" column="ReachTime" type="string" dbType="varchar"/>
+      <result property="KeepTime" column="KeepTime" type="string" dbType="varchar"/>
+      <result property="ReceiveTime" column="ReceiveTime" type="string" dbType="varchar"/>
+      <result property="PeopleCount" column="PeopleCount" type="long" dbType="long"/>
+      <result property="SeatNumber" column="SeatNumber" type="string" dbType="varchar"/>
+      <result property="OrderStatus" column="OrderStatus" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+      <result property="OrdersNo" column="OrdersNo" type="string" dbType="varchar"/>
+    </resultMap>
+    <resultMap id="V_OrderManage111" class="V_OrderManage">
+
+      <result property="V_Phone" column="V_Phone" type="string" dbType="varchar"/>
+      <result property="V_ConsumerName" column="V_ConsumerName" type="string" dbType="varchar"/>
+
+      <result property="V_CardNo" column="V_CardNo" type="string" dbType="varchar"/>
+
+      <result property="V_ID" column="V_ID" type="long" dbType="long"/>
+
+      <result property="V_SeatNumber" column="V_SeatNumber" type="string" dbType="varchar"/>
+      <result property="V_TotalTime" column="V_TotalTime" type="long" dbType="long"/>
+      <result property="V_SuccessedTime" column="V_SuccessedTime" type="long" dbType="long"/>
+      <result property="V_CancelTime" column="V_CancelTime" type="long" dbType="long"/>
+      <result property="V_MobileTime" column="V_MobileTime" type="long" dbType="long"/>
+
+      <result property="V_AvgPayMoney" column="V_AvgPayMoney" type="long" dbType="long"/>
+      <result property="V_FirstOrderTime" column="V_FirstOrderTime" type="DateTime" dbType="DateTime"/>
+      <result property="V_LastOrderTime" column="V_LastOrderTime" type="DateTime" dbType="DateTime"/>
+
+
+      <result property="V_PayMoney" column="V_PayMoney" type="long" dbType="long"/>
+
+    </resultMap>
+  </resultMaps>
+  
+  <statements>
+    <select id="SelectOrderManage22" resultClass="V_OrderManage" parameterClass="HashTable">
+      select   V_ID, V_ConsumerName,SeatManage.Number  AS V_SeatNumber,V_TotalTime, V_SuccessedTime,V_CancelTime,
+      V_MobileTime,V_PayMoney,V_AvgPayMoney,V_Phone,V_CardNo
+      from(
+      SELECT ComsumerManage.ID AS V_ID,ComsumerManage.ConsumerName AS V_ConsumerName,sum(V_SeatNumber) AS V_SeatNumber,sum(V_TotalTime) AS V_TotalTime,sum(V_SuccessedTime) AS V_SuccessedTime,sum(V_CancelTime) AS V_CancelTime,
+      sum(V_MobileTime) AS V_MobileTime,sum(V_PayMoney) AS V_PayMoney,sum(V_AvgPayMoney) AS V_AvgPayMoney,
+      ComsumerManage.Phone AS V_Phone,
+      ComsumerManage.CardNo AS V_CardNo FROM
+      (
+      SELECT  OrderManage.ConsumerNo,0 AS V_SeatNumber,0 AS V_SuccessedTime,sum(CASE WHEN OrderManage.OrderStatus='3' THEN 1 ELSE 0 END) AS V_CancelTime,sum(CASE WHEN OrderManage.OrderStatus='2' THEN 1 ELSE 0 END) AS V_MobileTime,0 AS V_PayMoney,
+      0 AS V_AvgPayMoney, count(1) AS V_TotalTime from OrderManage
+      <dynamic prepend=" where ">
+        ConsumerNo in (SELECT  ConsumerNo  from OrderManage  GROUP BY ConsumerNo) and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[  strftime('%Y-%m-%d',OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      GROUP BY ConsumerNo
+
+      UNION
+      SELECT  ConsumerNo,0 AS V_SeatNumber,sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_SuccessedTime,0 AS V_CancelTime,0 AS V_MobileTime,sum(OrdersListManage.PayMoney) AS V_PayMoney,
+      Sum(OrdersListManage.PayMoney)/Sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_AvgPayMoney, 0 AS V_TotalTime
+      from OrdersListManage
+      <dynamic prepend=" where ">
+        ConsumerNo in (SELECT  ConsumerNo  from OrderManage  GROUP BY ConsumerNo) and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',CreateTime)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',CreateTime) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      GROUP BY ConsumerNo
+      UNION
+
+      select ConsumerNo,max(V_SeatNumber),0 AS V_TotalTime,0 AS V_SuccessedTime,0 AS V_CancelTime,
+      0 AS V_MobileTime,0 AS V_PayMoney,0 AS V_AvgPayMoney  from
+      (
+      select  ConsumerNo,ID as V_SeatNumber from
+      (select ConsumerNo,C.ID,count(1) sumseatno  from OrderManage
+      JOIN SeatManage C on OrderManage.SeatNumber=C.Number
+
+      <dynamic prepend=" where ">
+        1=1 and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderManage.OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',OrderManage.OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      group by ConsumerNo,SeatNumber)
+      A
+      where sumseatno=(
+      select max(sumseatno) from
+      (select ConsumerNo,SeatNumber,count(1) sumseatno from OrderManage
+      <dynamic prepend=" where ">
+        1=1 and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      group by ConsumerNo,SeatNumber)
+      B
+      where consumerno=A.consumerno)
+      ) C  group by ConsumerNo) AS ABC
+      INNER JOIN  ComsumerManage ON  ABC.ConsumerNo=ComsumerManage.ConsumerNo
+      group by ComsumerManage.ID,ComsumerManage.ConsumerName
+      order by ComsumerManage.ID
+      ) ABCD
+      join SeatManage on ABCD.V_SeatNumber=SeatManage.ID
+    </select>
+    <select id="SelectOrderManage3" parameterClass="HashTable" resultClass="int">
+      SELECT Count(0) FROM (select   V_ID, V_ConsumerName,SeatManage.Number  AS V_SeatNumber,V_TotalTime, V_SuccessedTime,V_CancelTime,
+      V_MobileTime,V_PayMoney,V_AvgPayMoney,V_Phone,V_CardNo
+      from(
+      SELECT ComsumerManage.ID AS V_ID,ComsumerManage.ConsumerName AS V_ConsumerName,sum(V_SeatNumber) AS V_SeatNumber,sum(V_TotalTime) AS V_TotalTime,sum(V_SuccessedTime) AS V_SuccessedTime,sum(V_CancelTime) AS V_CancelTime,
+      sum(V_MobileTime) AS V_MobileTime,sum(V_PayMoney) AS V_PayMoney,sum(V_AvgPayMoney) AS V_AvgPayMoney,
+      ComsumerManage.Phone AS V_Phone,
+      ComsumerManage.CardNo AS V_CardNo FROM
+      (
+      SELECT  OrderManage.ConsumerNo,0 AS V_SeatNumber,0 AS V_SuccessedTime,sum(CASE WHEN OrderManage.OrderStatus='3' THEN 1 ELSE 0 END) AS V_CancelTime,sum(CASE WHEN OrderManage.OrderStatus='2' THEN 1 ELSE 0 END) AS V_MobileTime,0 AS V_PayMoney,
+      0 AS V_AvgPayMoney, count(1) AS V_TotalTime from OrderManage
+      <dynamic prepend=" where ">
+        ConsumerNo in (SELECT  ConsumerNo  from OrderManage  GROUP BY ConsumerNo) and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[  strftime('%Y-%m-%d',OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      GROUP BY ConsumerNo
+
+      UNION
+      SELECT  ConsumerNo,0 AS V_SeatNumber,sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_SuccessedTime,0 AS V_CancelTime,0 AS V_MobileTime,sum(OrdersListManage.PayMoney) AS V_PayMoney,
+      Sum(OrdersListManage.PayMoney)/Sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_AvgPayMoney, 0 AS V_TotalTime
+      from OrdersListManage
+      <dynamic prepend=" where ">
+        ConsumerNo in (SELECT  ConsumerNo  from OrderManage  GROUP BY ConsumerNo) and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',CreateTime)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',CreateTime) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      GROUP BY ConsumerNo
+      UNION
+
+      select ConsumerNo,max(V_SeatNumber),0 AS V_TotalTime,0 AS V_SuccessedTime,0 AS V_CancelTime,
+      0 AS V_MobileTime,0 AS V_PayMoney,0 AS V_AvgPayMoney  from
+      (
+      select  ConsumerNo,ID as V_SeatNumber from
+      (select ConsumerNo,C.ID,count(1) sumseatno  from OrderManage
+      JOIN SeatManage C on OrderManage.SeatNumber=C.Number
+
+      <dynamic prepend=" where ">
+        1=1 and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderManage.OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',OrderManage.OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      group by ConsumerNo,SeatNumber)
+      A
+      where sumseatno=(
+      select max(sumseatno) from
+      (select ConsumerNo,SeatNumber,count(1) sumseatno from OrderManage
+      <dynamic prepend=" where ">
+        1=1 and
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d',OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d',OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      group by ConsumerNo,SeatNumber)
+      B
+      where consumerno=A.consumerno)
+      ) C  group by ConsumerNo) AS ABC
+      INNER JOIN  ComsumerManage ON  ABC.ConsumerNo=ComsumerManage.ConsumerNo
+      group by ComsumerManage.ID,ComsumerManage.ConsumerName
+      order by ComsumerManage.ID
+      ) ABCD
+      join SeatManage on ABCD.V_SeatNumber=SeatManage.ID)
+    </select>
+    <select id="SelectSeatNumber" parameterClass="HashTable" resultClass="OrderManage">
+      SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark,OrdersNo AS OrdersNo
+      FROM OrderManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          SeatNumber = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertNewOrder" parameterClass="OrderManage">
+      INSERT INTO OrderManage
+      (OrderNo,ConsumerNo,OrderDate,ReachTime,KeepTime,PeopleCount,SeatNumber,OrderStatus,CreateUser,CreateTime,UpdUser,UpdTime,Remark,OrdersNo)
+      VALUES(#OrderNo#,#ConsumerNo#,#OrderDate#,#ReachTime#,#KeepTime#,#PeopleCount#,#SeatNumber#,#OrderStatus#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#,#Remark#,#OrdersNo#)
+      <selectKey resultClass="long" type="post" property="ComId">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <select id="SelectSelectionCreateTime" parameterClass="string" resultClass="OrderManage">
+      SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime, KeepTime AS KeepTime, ReceiveTime AS ReceiveTime, PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark,OrdersNo AS OrdersNo
+      FROM OrderManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          OrderNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <select id="SelectV_Order" parameterClass="string" resultClass="OrderManage">
+      SELECT o.com_ID AS ComId,o.OrderNo AS OrderNo,o.Remark AS Remark,o.SeatNumber AS SeatNumber,o.ReachTime AS ReachTime,o.KeepTime AS KeepTime,o.PeopleCount AS PeopleCount,o.OrderStatus AS OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          o.remark= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <select id="SelectV_OOrderManage" parameterClass="string" resultClass="OrderManage">
+      SELECT o.com_ID AS ComId,o.OrderNo AS OrderNo,o.Remark AS Remark,o.SeatNumber AS SeatNumber,o.ReachTime AS ReachTime,o.KeepTime AS KeepTime,OrderDate AS OrderDate ,o.PeopleCount AS PeopleCount,o.OrderStatus AS OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" and " property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          o.remark= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+    <select id="SelectV_OOCount" parameterClass="int" resultClass="int">
+      select count(0) from(SELECT o.com_ID AS ComId,o.OrderNo AS OrderNo,o.Remark AS Remark,c.ConsumerName,o.SeatNumber AS SeatNumber,o.ReachTime AS ReachTime,o.KeepTime AS KeepTime,OrderDate AS OrderDate ,o.PeopleCount AS PeopleCount,o.OrderStatus AS OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" and " property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          c.ConsumerName= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+      )
+    </select>
+    <select id="SelectOrderCount" parameterClass="int" resultClass="int">
+      select count(0) from(SELECT o.com_ID,o.OrderNo,o.Remark,o.SeatNumber,o.ReachTime,o.KeepTime,o.PeopleCount,o.OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" and " property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          o.remark= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+      )
+    </select>
+
+    <select id="SelectOrderManage" parameterClass="string" resultClass="OrderManage">
+      SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark,OrdersNo AS OrdersNo
+      FROM OrderManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          com_ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectOrderManageSeat" parameterClass="string" resultClass="OrderManage">
+      SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark,OrdersNo AS OrdersNo
+      FROM OrderManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          SeatNumber= #SeatNumber#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectOrderManageSeat2" parameterClass="string" resultClass="OrderManage">
+      SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark,OrdersNo AS OrdersNo
+      FROM OrderManage where SeatNumber= #SeatNumber# and OrderStatus=1
+    
+    </select>
+    <select id="SelectOrderManage1" parameterClass="string" resultClass="HashTable">
+      SELECT ComsumerManage.ID AS V_ID,ComsumerManage.ConsumerName AS V_ConsumerName,OrdersListManage.SeatNo AS V_SeatNumber,count(OrdersListManage.ConsumerNo) AS V_TotalTime,sum(CASE WHEN OrdersListManage.OrdersStatus='1' THEN 1 ELSE 0 END) AS V_SuccessedTime,sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_CancelTime,sum(CASE WHEN OrdersListManage.OrdersStatus='2' THEN 1 ELSE 0 END) AS V_MobileTime,sum(OrdersListManage.PayMoney) AS V_PayMoney FROM OrdersListManage INNER JOIN ComsumerManage on OrdersListManage.ConsumerNo=ComsumerManage.ConsumerNo GROUP BY ComsumerManage.ConsumerNo
+
+    </select>
+    <select id="SelectOrderTime" resultClass="V_OrderManage" parameterClass="string">
+      SELECT ConsumerNo, min(CreateTime) as V_FirstOrderTime,max(CreateTime) as V_LastOrderTime FROM OrderManage
+
+      <dynamic prepend=" WHERE">
+        <isParameterPresent>
+          ConsumerNo in(Select ConsumerNo from ComsumerManage Where ConsumerName=#value# )
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectOrderManage2" resultClass="V_OrderManage" parameterClass="string">
+      SELECT ComsumerManage.ID AS V_ID,ComsumerManage.ConsumerName AS V_ConsumerName,OrdersListManage.SeatNo AS V_SeatNumber,count(OrdersListManage.ConsumerNo) AS V_TotalTime,sum(CASE WHEN OrdersListManage.OrdersStatus='1' THEN 1 ELSE 0 END) AS V_SuccessedTime,sum(CASE WHEN OrdersListManage.OrdersStatus='3' THEN 1 ELSE 0 END) AS V_CancelTime,sum(CASE WHEN OrdersListManage.OrdersStatus='2' THEN 1 ELSE 0 END) AS V_MobileTime,sum(OrdersListManage.PayMoney) AS V_PayMoney,
+      ComsumerManage.Phone AS V_Phone,
+      ComsumerManage.CardNo AS V_CardNo,
+      Sum(OrdersListManage.PayMoney)/Sum(CASE WHEN OrdersListManage.OrdersStatus='1' THEN 1 ELSE 0 END) AS V_AvgPayMoney FROM OrdersListManage INNER JOIN ComsumerManage,OrderManage on OrdersListManage.ConsumerNo=ComsumerManage.ConsumerNo AND OrdersListManage.ConsumerNo=OrderManage.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="startDate">
+          OrderManage.CreateTime>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ OrderManage.CreateTime <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+      GROUP BY ComsumerManage.ConsumerNo
+    </select>
+
+   
+    <insert id="InsertOrderManage" parameterClass="OrderManage">
+      INSERT INTO OrderManage
+      (OrderNo,ConsumerNo,OrderDate,ReachTime,KeepTime,PeopleCount,SeatNumber,OrderStatus,CreateUser,CreateTime,UpdUser,UpdTime,Remark,OrdersNo)
+      VALUES(#OrderNo#,#ConsumerNo#,#OrderDate#,#ReachTime#,#KeepTime#,#PeopleCount#,#SeatNumber#,#OrderStatus#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#,#Remark#,#OrdersNo#)
+      <selectKey resultClass="long" type="post" property="ComId">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateOrderManage" parameterClass="OrderManage">
+      UPDATE OrderManage
+      SET OrderNo=#OrderNo#,ConsumerNo=#ConsumerNo#,OrderDate=#OrderDate#,ReachTime=#ReachTime#,KeepTime=#KeepTime#,PeopleCount=#PeopleCount#,SeatNumber=#SeatNumber#,OrderStatus=#OrderStatus#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#,Remark=#Remark#,OrdersNo=#OrdersNo#
+      WHERE com_ID = #ComId#
+    </update>
+    <update id="UpdateFailOrder" parameterClass="OrderManage">
+      UPDATE OrderManage
+      SET    OrderStatus='2'
+      where OrderNo=#OrderNo#
+
+    </update>
+    <update id="UpdateCancelOrder" parameterClass="OrderManage">
+      UPDATE OrderManage
+      SET    OrderStatus='3'
+      where OrderNo=#OrderNo#
+
+    </update>
+    <update id="UpdateFinishOrder" parameterClass="HashTable">
+      UPDATE OrderManage
+      SET    OrderStatus='4',ReceiveTime=#ReceiveTime#,OrdersNo=#OrdersNo#
+      where OrderNo=#OrderNo#
+    </update>
+    <delete id="DeleteOrderManage" parameterClass="string">
+      DELETE FROM OrderManage
+      WHERE com_ID = #value#
+    </delete>
+    <delete id="DeleteOrderManage1" parameterClass="HashTable">
+      DELETE FROM OrderManage
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="startDate">
+          strftime('%Y-%m-%d %H:%M:%S',OrderDate)>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ strftime('%Y-%m-%d %H:%M:%S',OrderDate) <= #endDate# ]]>
+        </isNotEmpty>
+      </dynamic>
+    </delete>
+  </statements>
+</sqlMap>

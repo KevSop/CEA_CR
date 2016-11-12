@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="CallRecordMap" xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="CallRecord" assembly="DataAccess.dll" type="DataAccess.Domain.CallRecord" />
+  </alias>
+  <resultMaps>
+    <resultMap id="CallRecordResult" class="CallRecord">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="TelNo" column="TelNo" type="string" dbType="varchar"/>
+      <result property="TelType" column="TelType" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectCallRecord" parameterClass="string" resultClass="CallRecord">
+      SELECT ID AS Id,TelNo AS TelNo,TelType AS TelType,CreateUser AS CreateUser,CreateTime AS CreateTime,Remark AS Remark
+      FROM CallRecord
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertCallRecord" parameterClass="CallRecord">
+      INSERT INTO CallRecord
+      (TelNo,TelType,CreateUser,CreateTime,Remark)
+      VALUES(#TelNo#,#TelType#,#CreateUser#,#CreateTime#,#Remark#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateCallRecord" parameterClass="CallRecord">
+      UPDATE CallRecord
+      SET TelNo=#TelNo#,TelType=#TelType#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,Remark=#Remark#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteCallRecord" parameterClass="string">
+      DELETE FROM CallRecord
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

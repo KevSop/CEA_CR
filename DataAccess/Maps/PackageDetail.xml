@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PackageDetailMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="PackageDetail" assembly="DataAccess.dll" type="DataAccess.Domain.PackageDetail" />
+    <typeAlias alias="V_PackageDetail" assembly="DataAccess.Models.dll" type="DataAccess.Models.V_PackageDetail" />
+
+  </alias>
+  <resultMaps>
+    <resultMap id="PackageDetailResult" class="PackageDetail">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="DetailNo" column="DetailNo" type="string" dbType="varchar"/>
+      <result property="PackageNo" column="PackageNo" type="string" dbType="varchar"/>
+      <result property="MenuNo" column="MenuNo" type="string" dbType="varchar"/>
+      <result property="MenuCount" column="MenuCount" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+
+  <resultMaps>
+    <resultMap id="PackageDetailResult1" class="V_PackageDetail">
+      <result property="DetailNo" column="DetailNo" type="string" dbType="varchar"/>
+      <result property="PackageNo" column="PackageNo" type="string" dbType="varchar"/>
+      <result property="MenuName" column="MenuName" type="string" dbType="varchar"/>
+      <result property="MenuCount" column="MenuCount" type="long" dbType="long"/>
+      <result property="SalePrice" column="SalePrice" type="single" dbType="Real"/>
+      <result property="MenuNo" column="MenuNo" type="string" dbType="varchar"/>
+      <result property="MenuType" column="MenuType" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectPackageDetail" parameterClass="string" resultClass="PackageDetail">
+      SELECT ID AS Id,DetailNo AS DetailNo,PackageNo AS PackageNo,MenuNo AS MenuNo,MenuCount AS MenuCount,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM PackageDetail
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertPackageDetail" parameterClass="PackageDetail">
+      INSERT INTO PackageDetail
+      (DetailNo,PackageNo,MenuNo,MenuCount,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#DetailNo#,#PackageNo#,#MenuNo#,#MenuCount#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdatePackageDetail" parameterClass="PackageDetail">
+      UPDATE PackageDetail
+      SET DetailNo=#DetailNo#,PackageNo=#PackageNo#,MenuNo=#MenuNo#,MenuCount=#MenuCount#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeletePackageDetail" parameterClass="string">
+      DELETE FROM PackageDetail
+      WHERE ID = #value#
+    </delete>
+
+    <select id="SelectPackageDetail1" parameterClass="string" resultClass="PackageDetail">
+      SELECT ID AS Id,DetailNo AS DetailNo,PackageNo AS PackageNo,MenuNo AS MenuNo,MenuCount AS MenuCount,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM PackageDetail
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          PackageNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+
+    <select id="SelectPackageDetail2" parameterClass="string" resultClass="Hashtable">
+      SELECT a.ID AS Id,DetailNo AS DetailNo,PackageNo AS PackageNo,b.MenuName as MenuName,b.SalePrice as SalePrice,
+      a.MenuNo AS MenuNo,MenuCount AS MenuCount,a.CreateUser AS CreateUser,(select Text from FieldValue where KEY='SaleUnit' AND Value=b.SaleUnit)
+      as SaleUnit, a.CreateTime AS CreateTime,a.UpdUser AS UpdUser,a.UpdTime AS UpdTime
+      FROM PackageDetail  a inner join MenuManage b  on a.MenuNo=b.MenuNo
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          PackageNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+
+    <select id="SelectPackageDetailSet" parameterClass="string" resultClass="Hashtable">
+      SELECT count(*) as co from MenuManage a inner join PackageDetail  b   on a.MenuNo=b.PackageNo
+     
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          b.MenuNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectPackageDetailSet1" parameterClass="string" resultClass="Hashtable">
+      SELECT count(*) as co from MenuManage a inner join PackageDetail  b   on a.MenuNo=b.PackageNo
+      inner join MenuReplace c on  b.DetailNo=c.DetailNo
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          c.ReplaceNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectPackageDetail3" parameterClass="string" resultClass="V_PackageDetail">
+      SELECT a.ID AS Id,DetailNo AS DetailNo,PackageNo AS PackageNo,b.MenuName as MenuName,b.SalePrice as SalePrice,
+      a.MenuNo AS MenuNo,MenuCount AS MenuCount,a.CreateUser AS CreateUser,(select Text from FieldValue where KEY='MenuType' AND Value=b.MenuType)
+      as MenuType,
+      a.CreateTime AS CreateTime,a.UpdUser AS UpdUser,a.UpdTime AS UpdTime
+      FROM PackageDetail  a inner join MenuManage b
+      on a.MenuNo=b.MenuNo
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          PackageNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+
+  </statements>
+</sqlMap>

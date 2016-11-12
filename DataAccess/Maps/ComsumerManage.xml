@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="ComsumerManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="ComsumerManage" assembly="DataAccess.dll" type="DataAccess.Domain.ComsumerManage" />
+    <typeAlias alias="V_OrderManageName" assembly="DataAccess.Models.dll" type="DataAccess.Models.V_OrderManageName" />
+  </alias>
+  <resultMaps>
+    <resultMap id="ComsumerManageResult" class="ComsumerManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="ConsumerNo" column="ConsumerNo" type="string" dbType="varchar"/>
+      <result property="ConsumerName" column="ConsumerName" type="string" dbType="varchar"/>
+      <result property="AccountNumber" column="AccountNumber" type="string" dbType="varchar"/>
+      <result property="InvoiceHeadText" column="InvoiceHeadText" type="string" dbType="varchar"/>
+      <result property="Sex" column="Sex" type="string" dbType="varchar"/>
+      <result property="Age" column="Age" type="string" dbType="varchar"/>
+      <result property="ConsumerType" column="ConsumerType" type="string" dbType="varchar"/>
+      <result property="Source" column="Source" type="string" dbType="varchar"/>
+      <result property="SendType" column="SendType" type="string" dbType="varchar"/>
+      <result property="Address" column="Address" type="string" dbType="varchar"/>
+      <result property="AddressType" column="AddressType" type="string" dbType="varchar"/>
+      <result property="ZipCode" column="ZipCode" type="string" dbType="varchar"/>
+      <result property="Country" column="Country" type="string" dbType="varchar"/>
+      <result property="Province" column="Province" type="string" dbType="varchar"/>
+      <result property="City" column="City" type="string" dbType="varchar"/>
+      <result property="County" column="County" type="string" dbType="varchar"/>
+      <result property="Street" column="Street" type="string" dbType="varchar"/>
+      <result property="Phone" column="Phone" type="string" dbType="varchar"/>
+      <result property="CardNo" column="CardNo" type="string" dbType="varchar"/>
+      <result property="SendCardChannel" column="SendCardChannel" type="string" dbType="varchar"/>
+      <result property="CardType" column="CardType" type="string" dbType="varchar"/>
+      <result property="Birthday" column="Birthday" type="DateTime" dbType="DateTime"/>
+      <result property="ConsumeType" column="ConsumeType" type="string" dbType="varchar"/>
+      <result property="ActiveArea" column="ActiveArea" type="string" dbType="varchar"/>
+      <result property="IsMember" column="IsMember" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+    <resultMap id="V_OrderManageNameResult" class="V_OrderManageName">
+      <result property="ComId" column="com_ID" type="long" dbType="long"/>
+      <result property="OrderNo" column="OrderNo" type="string" dbType="varchar"/>
+      <result property="ConsumerNo" column="ConsumerNo" type="string" dbType="varchar"/>
+      <result property="ConsumerName" column="ConsumerName" type="string" dbType="varchar"/>
+      <result property="OrderDate" column="OrderDate" type="string" dbType="varchar"/>
+      <result property="ReachTime" column="ReachTime" type="string" dbType="varchar"/>
+      <result property="KeepTime" column="KeepTime" type="string" dbType="varchar"/>
+      <result property="ReceiveTime" column="ReceiveTime" type="string" dbType="varchar"/>
+      <result property="PeopleCount" column="PeopleCount" type="long" dbType="long"/>
+      <result property="SeatNumber" column="SeatNumber" type="string" dbType="varchar"/>
+      <result property="OrderStatus" column="OrderStatus" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+    <select id="SelectComsumerNo" parameterClass="HashTable" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="consumerName">
+          ConsumerName=#consumerName#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="phone">
+          Phone = #phone#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+    <select id="SelectIfSuit" parameterClass="int" resultClass="int">
+      select count(0) from(SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark
+      FROM OrderManage
+      <dynamic prepend=" where ">
+
+        <isNotEmpty prepend=" and " property="startDate">
+          ReachTime >= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ ReachTime <= #endDate# ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="remark">
+          OrderDate = #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          SeatNumber= #tel#
+        </isNotEmpty>
+
+      </dynamic>
+      )
+    </select>
+    <select id="SelectIfSuitTwo" parameterClass="int" resultClass="int">
+      select count(0) from(SELECT com_ID AS ComId,OrderNo AS OrderNo,ConsumerNo AS ConsumerNo,OrderDate AS OrderDate,ReachTime AS ReachTime,KeepTime AS KeepTime,PeopleCount AS PeopleCount,SeatNumber AS SeatNumber,OrderStatus AS OrderStatus,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,Remark AS Remark
+      FROM OrderManage
+      <dynamic prepend=" where ">
+
+        <isNotEmpty prepend=" and " property="startDate">
+          KeepTime >= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ KeepTime <= #endDate# ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="remark">
+          OrderDate = #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          SeatNumber= #tel#
+        </isNotEmpty>
+
+      </dynamic>
+      )
+    </select>
+    <select id="SelectV_OOrderManageName" parameterClass="string" resultClass="V_OrderManageName">
+      SELECT o.com_ID AS ComId,o.OrderNo AS OrderNo,o.Remark AS Remark,c.ConsumerName,o.SeatNumber AS SeatNumber,o.ReachTime AS ReachTime,o.KeepTime AS KeepTime,OrderDate AS OrderDate ,o.PeopleCount AS PeopleCount,o.OrderStatus AS OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+
+        <isNotEmpty prepend=" and " property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend=" and " property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          c.ConsumerName= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+    <select id="ComsumerCountByAN" parameterClass="string" resultClass="int">
+      select count(0) from ComsumerManage where AccountNumber=#value#
+    </select>
+    <select id="SelectV_OrderName" parameterClass="string" resultClass="V_OrderManageName">
+      SELECT o.com_ID AS ComId,o.OrderNo AS OrderNo,c.ConsumerName,o.Remark AS Remark,o.SeatNumber AS SeatNumber,o.ReachTime AS ReachTime,o.KeepTime AS KeepTime,o.PeopleCount AS PeopleCount,o.OrderStatus AS OrderStatus FROM OrderManage as o inner join ComsumerManage as c on o.ConsumerNo=c.ConsumerNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="dy">
+          o.OrderStatus=#dy#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="startDate">
+          o.OrderDate = #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          o.ReachTime = #endDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="tel">
+          c.Phone= #tel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remark">
+          o.remark= #remark#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="orderNo">
+          o.orderno= #orderNo#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+    <select id="SelectComsumerNameOne" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ConsumerNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="ComsumerDataCount" parameterClass="int">
+      select count(0) from ComsumerManage
+    </select>
+    <select id="SelectComsumerManage" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectComsumerManage1" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText, case Sex when 1 then '男' else '女' END AS Sex,(select Text from FieldValue where KEY='MemberAge' AND Value=ComsumerManage.Age)  AS Age,(select Text from FieldValue where KEY='MemberType' AND Value=ComsumerManage.ConsumerType) AS ConsumerType,(select Text from FieldValue where KEY='MemberSource' AND Value=ComsumerManage.Source)  AS Source,(select Text from FieldValue where KEY='SendWay' AND Value=ComsumerManage.SendType)  AS SendType,Address AS Address,(select Text from FieldValue where KEY='AddressType' AND Value=ComsumerManage.AddressType)  AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,(select Text from FieldValue where KEY='SendCardChannel' AND Value=ComsumerManage.SendCardChannel) AS SendCardChannel,(select Text from FieldValue where KEY='MemberCardType' AND Value=ComsumerManage.CardType) AS CardType,Birthday AS Birthday,(select Text from FieldValue where KEY='ComsumeType' AND Value=ComsumerManage.ConsumeType)  AS ConsumeType,(select Text from FieldValue where KEY='ActiveArea' AND Value=ComsumerManage.ActiveArea)  AS ActiveArea, IsMember  AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+
+
+    </select>
+    <select id="SelectComsumerPhone" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          Phone = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <!--根据客户姓名查询对应的客户完整信息-->
+    <select id="SelectComsumerName" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ConsumerName = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectComsumerNameHan" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ConsumerNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <sql id="selectItem_fragment">
+      in (SELECT  ConsumerNo  from ComsumerManage
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="cname">
+          ConsumerName =  #cname#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="cphone">
+          Phone =  #cphone#
+        </isNotEmpty>
+      </dynamic>
+    </sql>
+
+    <!--查询客户列表的详细信息-->
+    <select id="SelectComsumerDetail" parameterClass="HashTable" resultClass="HashTable">
+      select ConsumerName,Sex,Phone,CardNo,Birthday,Number,V_SuccessedTime,V_CancelTime,V_TotalTime,MenuName,E.text from
+      (
+      select ConsumerNo,sum(V_SeatNumber) V_SeatNumber,sum(V_SuccessedTime) V_SuccessedTime,sum(V_CancelTime) V_CancelTime,
+      sum(V_TotalTime) V_TotalTime, sum(MenuId) MenuId
+      FROM(
+      SELECT  ConsumerNo,0 AS V_SeatNumber,0 AS V_SuccessedTime,sum(CASE WHEN OrderManage.OrderStatus='3' THEN 1 ELSE 0 END) AS V_CancelTime,
+      count(1) AS V_TotalTime,0 MenuId from OrderManage where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      GROUP BY ConsumerNo
+
+      UNION
+
+      SELECT  ConsumerNo,0 AS V_SeatNumber,sum(CASE WHEN OrdersListManage.OrdersStatus='1' THEN 1 ELSE 0 END) AS V_SuccessedTime,0 AS V_CancelTime, 0 AS V_TotalTime,0 MenuId
+      from OrdersListManage where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      GROUP BY ConsumerNo
+
+      UNION
+
+      select ConsumerNo,max(V_SeatNumber) AS V_SeatNumber,0 AS V_SuccessedTime,0 AS V_CancelTime,0 AS V_TotalTime,0 MenuId
+      from
+      (
+      select  ConsumerNo,ID as V_SeatNumber from
+      (select ConsumerNo,C.ID,count(1) sumseatno  from OrderManage
+      JOIN SeatManage C on OrderManage.SeatNumber=C.Number
+      where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      group by ConsumerNo,SeatNumber)
+      A
+      where sumseatno=(
+      select max(sumseatno) from
+      (select ConsumerNo,SeatNumber,count(1) sumseatno from OrderManage
+      where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      group by ConsumerNo,SeatNumber)
+      B
+      where consumerno=A.consumerno)
+      ) C  group by ConsumerNo
+
+      UNION
+
+      SELECT ConsumerNo,0 AS V_SeatNumber,0 AS V_SuccessedTime,0 AS V_CancelTime,0 AS V_TotalTime,max(MenuId) MenuId from
+      (select ConsumerNo,ID as MenuId from
+      (
+      select ConsumerNo,C.ID,sum(SendCount) sumMenu from OrdersListManage A
+      join OrdersDetail B on A.OrdersNo=B.OrdersNo
+      join MenuManage C on B.MenuCode=C.MenuNo
+      where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      group by ConsumerNo, C.ID
+      ) A
+      where sumMenu=(
+      select max(sumMenu) from
+      (select ConsumerNo,MenuCode,sum(SendCount) sumMenu from OrdersListManage A
+      join OrdersDetail B on A.OrdersNo=B.OrdersNo
+      where ConsumerNo 
+      <include refid="selectItem_fragment"/>
+      )
+      group by ConsumerNo,MenuCode)
+      B
+      where ConsumerNo=A.ConsumerNo)
+      ) ABC
+      group by ConsumerNo
+      )  group by ConsumerNo
+      ) A
+      LEFT OUTER JOIN ComsumerManage B on A.ConsumerNo=B.ConsumerNo
+      LEFT OUTER JOIN SeatManage C ON A.V_SeatNumber=C.ID
+      LEFT OUTER JOIN MenuManage D on A.MenuId=D.ID
+      LEFT OUTER JOIN FieldValue E on E.key='MenuCharacteristic'  AND D.MenuCharacteristic=E.value
+    </select>
+   
+    <select id="SelectComsumerPC" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage where ConsumerName = #name# and Phone = #phone#
+    </select>
+    <select id="SelectComsumerCardNo" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          CardNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="IsExitsSelectComsumerManage" parameterClass="Hashtable" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,
+      Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,
+      Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,
+      CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,
+      UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend=" WHERE ">
+        <isNotEmpty prepend="and" property="sendCardChannel">
+          SendCardChannel= #sendCardChannel#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="cardType">
+          CardType= #cardType#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="consumerType">
+          ConsumerType= #consumerType#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="consumeType">
+          ConsumeType= #consumeType#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="age">
+          Age= #age#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="source">
+          Source= #source#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="addressType">
+          AddressType= #addressType#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="activeArea">
+          ActiveArea= #activeArea#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+    <select id="SelectComsumerConsumerNo" parameterClass="string" resultClass="ComsumerManage">
+      SELECT ID AS Id,ConsumerNo AS ConsumerNo,ConsumerName AS ConsumerName,AccountNumber AS AccountNumber,InvoiceHeadText AS InvoiceHeadText,Sex AS Sex,Age AS Age,ConsumerType AS ConsumerType,Source AS Source,SendType AS SendType,Address AS Address,AddressType AS AddressType,ZipCode AS ZipCode,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,Phone AS Phone,CardNo AS CardNo,SendCardChannel AS SendCardChannel,CardType AS CardType,Birthday AS Birthday,ConsumeType AS ConsumeType,ActiveArea AS ActiveArea,IsMember AS IsMember,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM ComsumerManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ConsumerNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertComsumerManage" parameterClass="ComsumerManage">
+      INSERT INTO ComsumerManage
+      (ConsumerNo,ConsumerName,AccountNumber,InvoiceHeadText,Sex,Age,ConsumerType,Source,SendType,Address,AddressType,ZipCode,Country,Province,City,County,Street,Phone,CardNo,SendCardChannel,CardType,Birthday,ConsumeType,ActiveArea,IsMember,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#ConsumerNo#,#ConsumerName#,#AccountNumber#,#InvoiceHeadText#,#Sex#,#Age#,#ConsumerType#,#Source#,#SendType#,#Address#,#AddressType#,#ZipCode#,#Country#,#Province#,#City#,#County#,#Street#,#Phone#,#CardNo#,#SendCardChannel#,#CardType#,#Birthday#,#ConsumeType#,#ActiveArea#,#IsMember#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateComsumerManage" parameterClass="ComsumerManage">
+      UPDATE ComsumerManage
+      SET ConsumerNo=#ConsumerNo#,ConsumerName=#ConsumerName#,AccountNumber=#AccountNumber#,InvoiceHeadText=#InvoiceHeadText#,Sex=#Sex#,Age=#Age#,ConsumerType=#ConsumerType#,Source=#Source#,SendType=#SendType#,Address=#Address#,AddressType=#AddressType#,ZipCode=#ZipCode#,Country=#Country#,Province=#Province#,City=#City#,County=#County#,Street=#Street#,Phone=#Phone#,CardNo=#CardNo#,SendCardChannel=#SendCardChannel#,CardType=#CardType#,Birthday=#Birthday#,ConsumeType=#ConsumeType#,ActiveArea=#ActiveArea#,IsMember=#IsMember#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteComsumerManage" parameterClass="string">
+      DELETE FROM ComsumerManage
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

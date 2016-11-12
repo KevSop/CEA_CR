@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="InitializeMap"  xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="Initialize" assembly="DataAccess.dll" type="DataAccess.Domain.Initialize" />
+  </alias>
+  <resultMaps>
+    <resultMap id="InitializeResult" class="Initialize">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="InitializeNo" column="InitializeNo" type="string" dbType="varchar"/>
+      <result property="MerchantNo" column="MerchantNo" type="string" dbType="varchar"/>
+      <result property="BusinessNo" column="BusinessNo" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectInitialize" parameterClass="string" resultClass="Initialize">
+      SELECT ID AS Id,InitializeNo AS InitializeNo,MerchantNo AS MerchantNo,BusinessNo AS BusinessNo,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM Initialize
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertInitialize" parameterClass="Initialize">
+      INSERT INTO Initialize
+      (InitializeNo,MerchantNo,BusinessNo,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#InitializeNo#,#MerchantNo#,#BusinessNo#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateInitialize" parameterClass="Initialize">
+      UPDATE Initialize
+      SET InitializeNo=#InitializeNo#,MerchantNo=#MerchantNo#,BusinessNo=#BusinessNo#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteInitialize" parameterClass="string">
+      DELETE FROM Initialize
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

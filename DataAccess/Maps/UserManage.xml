@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="UserManageMap" xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="UserManage" assembly="DataAccess.dll" type="DataAccess.Domain.UserManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="UserManageResult" class="UserManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="UserNo" column="UserNo" type="string" dbType="varchar"/>
+      <result property="LoginName" column="LoginName" type="string" dbType="varchar"/>
+      <result property="Cname" column="CName" type="string" dbType="varchar"/>
+      <result property="LoginPwd" column="LoginPwd" type="string" dbType="varchar"/>
+      <result property="Post" column="Post" type="long" dbType="long"/>
+      <result property="Partment" column="Partment" type="string" dbType="varchar"/>
+      <result property="Status" column="Status" type="long" dbType="long"/>
+      <result property="WorkArea" column="WorkArea" type="string" dbType="varchar"/>
+      <result property="WorkType" column="WorkType" type="string" dbType="varchar"/>
+      <result property="Tel" column="Tel" type="string" dbType="varchar"/>
+      <result property="Email" column="Email" type="string" dbType="varchar"/>
+      <result property="IdCard" column="IDCard" type="string" dbType="varchar"/>
+      <result property="Birthday" column="Birthday" type="DateTime" dbType="DateTime"/>
+      <result property="Sex" column="Sex" type="long" dbType="long"/>
+      <result property="Photo" column="Photo" type="Byte" dbType="Binary"/>
+      <result property="Country" column="Country" type="string" dbType="varchar"/>
+      <result property="Province" column="Province" type="string" dbType="varchar"/>
+      <result property="City" column="City" type="string" dbType="varchar"/>
+      <result property="County" column="County" type="string" dbType="varchar"/>
+      <result property="Street" column="Street" type="string" dbType="varchar"/>
+      <result property="IsSupperUser" column="IsSupperUser" type="long" dbType="long"/>
+      <result property="RefundPwd" column="RefundPwd" type="string" dbType="varchar"/>
+      <result property="LastLoginTime" column="LastLoginTime" type="DateTime" dbType="DateTime"/>
+      <result property="LastIp" column="LastIp" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectUserManage" parameterClass="string" resultClass="UserManage">
+      SELECT ID AS Id,UserNo AS UserNo,LoginName AS LoginName,CName AS Cname,LoginPwd AS LoginPwd,Post AS Post,Partment AS Partment,Status AS Status,WorkArea AS WorkArea,WorkType AS WorkType,Tel AS Tel,Email AS Email,IDCard AS IdCard,Birthday AS Birthday,Sex AS Sex,Photo AS Photo,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,IsSupperUser AS IsSupperUser,RefundPwd AS RefundPwd,LastLoginTime AS LastLoginTime,LastIp AS LastIp,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectUserManage2" parameterClass="string" resultClass="UserManage">
+      SELECT ID AS Id,UserNo AS UserNo,LoginName AS LoginName,CName AS Cname,LoginPwd AS LoginPwd,Post AS Post,Partment AS Partment,Status AS Status,WorkArea AS WorkArea,WorkType AS WorkType,Tel AS Tel,Email AS Email,IDCard AS IdCard,Birthday AS Birthday,Sex AS Sex,Photo AS Photo,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,IsSupperUser AS IsSupperUser,RefundPwd AS RefundPwd,LastLoginTime AS LastLoginTime,LastIp AS LastIp,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          CName like '%$value$%' or LoginName like '%$value$%'
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectUserManage1" parameterClass="string" resultClass="UserManage">
+      SELECT LoginName
+      FROM UserManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          LoginPwd = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="DataCount" parameterClass="string" resultClass="int" >
+      select count(0) from UserManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          CName like '%$value$%' or LoginName like '%$value$%'
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectPartmentUserManage" parameterClass="string" resultClass="UserManage">
+      SELECT ID AS Id,UserNo AS UserNo,LoginName AS LoginName,CName AS Cname,LoginPwd AS LoginPwd,Post AS Post,Partment AS Partment,Status AS Status,WorkArea AS WorkArea,WorkType AS WorkType,Tel AS Tel,Email AS Email,IDCard AS IdCard,Birthday AS Birthday,Sex AS Sex,Photo AS Photo,Country AS Country,Province AS Province,City AS City,County AS County,Street AS Street,IsSupperUser AS IsSupperUser,RefundPwd AS RefundPwd,LastLoginTime AS LastLoginTime,LastIp AS LastIp,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM UserManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          Partment = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <select id="SelectUserItem" parameterClass="string" resultClass="UserManage">
+      SELECT distinct LoginName
+      FROM UserManage
+    </select>
+
+    <insert id="InsertUserManage" parameterClass="UserManage">
+      INSERT INTO UserManage
+      (UserNo,LoginName,CName,LoginPwd,Post,Partment,Status,WorkArea,WorkType,Tel,Email,IDCard,Birthday,Sex,Photo,Country,Province,City,County,Street,IsSupperUser,RefundPwd,LastLoginTime,LastIp,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#UserNo#,#LoginName#,#Cname#,#LoginPwd#,#Post#,#Partment#,#Status#,#WorkArea#,#WorkType#,#Tel#,#Email#,#IdCard#,#Birthday#,#Sex#,#Photo#,#Country#,#Province#,#City#,#County#,#Street#,#IsSupperUser#,#RefundPwd#,#LastLoginTime#,#LastIp#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateUserManage" parameterClass="UserManage">
+      UPDATE UserManage
+      SET UserNo=#UserNo#,LoginName=#LoginName#,CName=#Cname#,LoginPwd=#LoginPwd#,Post=#Post#,Partment=#Partment#,Status=#Status#,WorkArea=#WorkArea#,WorkType=#WorkType#,Tel=#Tel#,Email=#Email#,IDCard=#IdCard#,Birthday=#Birthday#,Sex=#Sex#,Photo=#Photo#,Country=#Country#,Province=#Province#,City=#City#,County=#County#,Street=#Street#,IsSupperUser=#IsSupperUser#,RefundPwd=#RefundPwd#,LastLoginTime=#LastLoginTime#,LastIp=#LastIp#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteUserManage" parameterClass="string">
+      DELETE FROM UserManage
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

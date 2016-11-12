@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DataAccess.Domain.DbBackupLog">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="_id" Hidden="true" />
+      <Field Name="_isChanged" Hidden="true" />
+      <Field Name="_isDeleted" Hidden="true" />
+      <Field Name="_opertype" Hidden="true" />
+      <Field Name="_remark" Hidden="true" />
+      <Field Name="_status" Hidden="true" />
+      <Field Name="_time" Hidden="true" />
+      <Field Name="_userno" Hidden="true" />
+      <Method Name="DbBackupLog" Hidden="true" />
+      <Method Name="MarkAsDeleted" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEADIAAEAABgBAAQAEBAAAAAAAAEAAAAQAQAAQAAAQA=</HashCode>
+      <FileName>Domain\DbBackupLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="MarketManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="MarketManage" assembly="DataAccess.dll" type="DataAccess.Domain.MarketManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="MarketManageResult" class="MarketManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="MarketNo" column="MarketNo" type="string" dbType="varchar"/>
+      <result property="MarketName" column="MarketName" type="string" dbType="varchar"/>
+      <result property="StartTime" column="StartTime" type="string" dbType="varchar"/>
+      <result property="EndTime" column="EndTime" type="string" dbType="varchar"/>
+      <result property="DataOwnerDay" column="DataOwnerDay" type="string" dbType="varchar"/>
+      <result property="IsEnble" column="IsEnble" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectMarketManage" parameterClass="string" resultClass="MarketManage">
+      SELECT ID AS Id,MarketNo AS MarketNo,MarketName AS MarketName,StartTime AS StartTime,EndTime AS EndTime,DataOwnerDay AS DataOwnerDay,IsEnble AS IsEnble,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM MarketManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectMarketManageName" parameterClass="string" resultClass="MarketManage">
+      SELECT ID AS Id,MarketNo AS MarketNo,MarketName AS MarketName,StartTime AS StartTime,EndTime AS EndTime,DataOwnerDay AS DataOwnerDay,IsEnble AS IsEnble,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM MarketManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          MarketName = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <select id="SelectMarketManageNameValue" parameterClass="string" resultClass="MarketManage">
+      SELECT MarketName from MarketManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          MarketName = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectMarketManageNameNo" parameterClass="string" resultClass="MarketManage">
+      SELECT ID AS Id,MarketNo AS MarketNo,MarketName AS MarketName,StartTime AS StartTime,EndTime AS EndTime,DataOwnerDay AS DataOwnerDay,IsEnble AS IsEnble,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM MarketManage
+      <dynamic prepend=" WHERE ">
+        <isParameterPresent>
+          strftime('%H:%M',EndTime)>= #value#
+        </isParameterPresent>
+        <isParameterPresent>
+          <![CDATA[ and strftime('%H:%M',StartTime) <= #value# ]]>
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <insert id="InsertMarketManage" parameterClass="MarketManage">
+      INSERT INTO MarketManage
+      (MarketNo,MarketName,StartTime,EndTime,DataOwnerDay,IsEnble,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#MarketNo#,#MarketName#,#StartTime#,#EndTime#,#DataOwnerDay#,#IsEnble#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateMarketManage" parameterClass="MarketManage">
+      UPDATE MarketManage
+      SET MarketNo=#MarketNo#,MarketName=#MarketName#,StartTime=#StartTime#,EndTime=#EndTime#,DataOwnerDay=#DataOwnerDay#,IsEnble=#IsEnble#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteMarketManage" parameterClass="string">
+      DELETE FROM MarketManage
+      WHERE ID = #value#
+    </delete>
+
+    <select id="SelectBusinessDayTotalReport" parameterClass="string" resultClass="MarketManage">
+      SELECT MarketName,StartTime,EndTime from MarketManage
+    </select>
+    
+  </statements>
+</sqlMap>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="CodingTypeManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="CodingTypeManage" assembly="DataAccess.dll" type="DataAccess.Domain.CodingTypeManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="CodingTypeManageResult" class="CodingTypeManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="Code" column="Code" type="string" dbType="varchar"/>
+      <result property="Name" column="Name" type="string" dbType="varchar"/>
+      <result property="FirstLetter" column="FirstLetter" type="string" dbType="varchar"/>
+      <result property="IsContainDate" column="IsContainDate" type="long" dbType="long"/>
+      <result property="Length" column="Length" type="long" dbType="long"/>
+      <result property="StartValue" column="StartValue" type="string" dbType="varchar"/>
+      <result property="CurrentValue" column="CurrentValue" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+    <select id="SelectCodingTypeManage" parameterClass="string" resultClass="CodingTypeManage">
+      SELECT ID AS Id,Code AS Code,Name AS Name,FirstLetter AS FirstLetter,IsContainDate AS IsContainDate,Length AS Length,StartValue AS StartValue,CurrentValue AS CurrentValue,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM CodingTypeManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+	<select id="SelectCodingTypeManage1" parameterClass="string" resultClass="CodingTypeManage">
+		SELECT ID AS Id,Code AS Code,Name AS Name,FirstLetter AS FirstLetter,IsContainDate AS IsContainDate,Length AS Length,StartValue AS StartValue,CurrentValue AS CurrentValue,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+		FROM CodingTypeManage
+		<dynamic prepend="WHERE">
+			<isParameterPresent>
+				Code = #value#
+			</isParameterPresent>
+		</dynamic>
+	</select>
+	  <select id="CodingDataCount" parameterClass="int">
+      select count(0) from CodingTypeManage
+    </select>
+	<select id="SelectCodingTypeManage2"  parameterClass="Hashtable"  resultClass="Hashtable">
+		  SELECT ID AS Id,Code AS Code,Name AS Name,FirstLetter AS FirstLetter,IsContainDate AS IsContainDate,Length AS Length,StartValue AS StartValue,CurrentValue AS CurrentValue,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+		  FROM CodingTypeManage
+		  <dynamic prepend=" WHERE ">
+			  <isNotEmpty prepend="and" property="sid">
+				  Code= #sid#
+			  </isNotEmpty>
+			  <isNotEmpty prepend="and" property="name1">
+				  name= #name1#
+			  </isNotEmpty>
+		  </dynamic>
+	  </select >
+	  <insert id="InsertCodingTypeManage" parameterClass="CodingTypeManage">
+      INSERT INTO CodingTypeManage
+      (Code,Name,FirstLetter,IsContainDate,Length,StartValue,CurrentValue,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#Code#,#Name#,#FirstLetter#,#IsContainDate#,#Length#,#StartValue#,#CurrentValue#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateCodingTypeManage" parameterClass="CodingTypeManage">
+      UPDATE CodingTypeManage
+      SET Code=#Code#,Name=#Name#,FirstLetter=#FirstLetter#,IsContainDate=#IsContainDate#,Length=#Length#,StartValue=#StartValue#,CurrentValue=#CurrentValue#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+	  <update id="UpdateCodingTypeManage1" parameterClass="CodingTypeManage">
+		  UPDATE CodingTypeManage
+		  SET Code=#Code#,Name=#Name#,FirstLetter=#FirstLetter#,IsContainDate=#IsContainDate#,Length=#Length#,StartValue=#StartValue#,CurrentValue=#CurrentValue#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+		  WHERE Code = #Code#
+	  </update>
+    <delete id="DeleteCodingTypeManage" parameterClass="string">
+      DELETE FROM CodingTypeManage
+      WHERE ID = #value#
+    </delete>
+	<delete id="DeleteCodingTypeManage1" parameterClass="string">
+		DELETE FROM CodingTypeManage
+		WHERE Code = #value#
+	</delete>
+  </statements>
+</sqlMap>

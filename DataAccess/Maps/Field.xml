@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="FieldMap" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="Field" assembly="DataAccess.dll" type="DataAccess.Domain.Field" />
+  </alias>
+  <resultMaps>
+    <resultMap id="FieldResult" class="Field">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="Key" column="Key" type="string" dbType="varchar"/>
+      <result property="Name" column="Name" type="string" dbType="varchar"/>
+      <result property="IsValidate" column="IsValidate" type="long" dbType="long"/>
+      <result property="CanEdit" column="CanEdit" type="long" dbType="long"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectField" parameterClass="string" resultClass="Field">
+      SELECT ID AS Id,Key AS Key,Name AS Name,IsValidate AS IsValidate,CanEdit AS CanEdit,Remark AS Remark,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM Field
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+	<select id="SelectField1" parameterClass="string" resultClass="Field">
+		SELECT ID AS Id,Key AS Key,Name AS Name,IsValidate AS IsValidate,CanEdit AS CanEdit,Remark AS Remark,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+		FROM Field
+		<dynamic prepend="WHERE">
+			<isParameterPresent>
+				Key = #value#
+			</isParameterPresent>
+		</dynamic>
+	</select>
+    <insert id="InsertField" parameterClass="Field">
+      INSERT INTO Field
+      (Key,Name,IsValidate,CanEdit,Remark,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#Key#,#Name#,#IsValidate#,#CanEdit#,#Remark#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateField" parameterClass="Field">
+      UPDATE Field
+      SET Key=#Key#,Name=#Name#,IsValidate=#IsValidate#,CanEdit=#CanEdit#,Remark=#Remark#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+	  <update id="UpdateField1" parameterClass="Field">
+		  UPDATE Field
+		  SET Key=#Key#,Name=#Name#,IsValidate=#IsValidate#,CanEdit=#CanEdit#,Remark=#Remark#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+		  WHERE Key = #Key#
+	  </update>
+    <delete id="DeleteField" parameterClass="string">
+      DELETE FROM Field
+      WHERE ID = #value#
+    </delete>
+	  <delete id="DeleteField1" parameterClass="string">
+		  DELETE FROM Field
+		  WHERE Key = #value#
+	  </delete>
+  </statements>
+</sqlMap>

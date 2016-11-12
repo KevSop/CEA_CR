@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DbBackupLogMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="DbBackupLog" assembly="DataAccess.dll" type="DataAccess.Domain.DbBackupLog" />
+    <typeAlias alias="R_CashierCheckReport" assembly="DataAccess.Models.dll" type="DataAccess.Models.R_CashierCheckReport" />
+    <typeAlias alias="R_CashierListReport" assembly="DataAccess.Models.dll" type="DataAccess.Models.R_CashierListReport" />
+    <typeAlias alias="R_FoodSalesListReport" assembly="DataAccess.Models.dll" type="DataAccess.Models.R_FoodSalesListReport" />
+    <typeAlias alias="R_SystemPreferentialReport" assembly="DataAccess.Models.dll" type="DataAccess.Models.R_SystemPreferentialReport" />
+  </alias>
+  <resultMaps>
+    <resultMap id="DbBackupLogResult" class="DbBackupLog">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="Time" column="Time" type="DateTime" dbType="DateTime"/>
+      <result property="OperType" column="OperType" type="string" dbType="varchar"/>
+      <result property="UserNo" column="UserNo" type="string" dbType="varchar"/>
+      <result property="Status" column="Status" type="long" dbType="long"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+<!--1.-->
+  <resultMaps>
+    <resultMap id="CashierCheckReportResult" class="R_CashierCheckReport">
+      <result property="UserNo" column="UserNo" type="string" dbType="varchar"/>
+      <result property="LoginName" column="LoginName" type="string" dbType="varchar"/>
+      <result property="PayMoney" column="PayMoney" type="single" dbType="Real"/>
+      <result property="Pay_Money" column="Pay_Money" type="single" dbType="Real"/>
+      <result property="Pay_Card" column="Pay_Card" type="single" dbType="Real"/>
+    </resultMap>
+  </resultMaps>
+<!--2.-->
+  <resultMaps>
+    <resultMap id="CashierListReportResult" class="R_CashierListReport">
+      <result property="LoginName" column="LoginName" type="string" dbType="varchar"/>
+      <result property="OrdersNo" column="OrdersNo" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="Pay_Money" column="Pay_Money" type="single" dbType="Real"/>
+      <result property="Pay_Card" column="Pay_Card" type="single" dbType="Real"/>
+    </resultMap>
+  </resultMaps>
+<!--3.-->
+  <resultMaps>
+    <resultMap id="FoodSalesListReportResult" class="R_FoodSalesListReport">
+      <result property="MenuCode" column="MenuCode" type="string" dbType="varchar"/>
+      <result property="MenuName" column="MenuName" type="string" dbType="varchar"/>
+      <result property="SaleUnit" column="SaleUnit" type="string" dbType="varchar"/>
+      <result property="SendCount" column="SendCount" type="long" dbType="long"/>
+      <result property="MenuPrice" column="MenuPrice" type="single" dbType="Real"/>
+      <result property="PayMoney" column="PayMoney" type="single" dbType="Real"/>
+    </resultMap>
+  </resultMaps>
+
+  <!--5.-->
+  <resultMaps>
+    <resultMap id="SystemPreferentialReportResult" class="R_SystemPreferentialReport">
+      <result property="LoginName" column="LoginName" type="string" dbType="varchar"/>
+      <result property="OrdersNo" column="OrdersNo" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="SeatNo" column="SeatNo" type="string" dbType="varchar"/>
+      <result property="TotalMoney" column="TotalMoney" type="single" dbType="Real"/>
+      <result property="DiscountMoney" column="DiscountMoney" type="single" dbType="Real"/>
+    </resultMap>
+  </resultMaps>
+  
+  <statements>
+
+    <select id="SelectDbBackupLog" parameterClass="string" resultClass="DbBackupLog">
+      SELECT ID AS Id,Time AS Time,OperType AS OperType,UserNo AS UserNo,Status AS Status,Remark AS Remark
+      FROM DbBackupLog
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertDbBackupLog" parameterClass="DbBackupLog">
+      INSERT INTO DbBackupLog
+      (Time,OperType,UserNo,Status,Remark)
+      VALUES(#Time#,#OperType#,#UserNo#,#Status#,#Remark#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateDbBackupLog" parameterClass="DbBackupLog">
+      UPDATE DbBackupLog
+      SET Time=#Time#,OperType=#OperType#,UserNo=#UserNo#,Status=#Status#,Remark=#Remark#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteDbBackupLog" parameterClass="string">
+      DELETE FROM DbBackupLog
+      WHERE ID = #value#
+    </delete>
+
+    <!--1.收银员交款统计表-->
+    <select id="SelectCashierCheckReport"  parameterClass="Hashtable" resultClass="R_CashierCheckReport">
+      select UserNo, LoginName,Pay_Money,Pay_Card   ,sum(Pay_Money+Pay_Card) as PayMoney from (
+      select UserNo,LoginName,max(case PayType when "1" then PayMoney else 0 end) Pay_Money,max(case PayType when "2" then PayMoney else 0 end) Pay_Card
+      from
+      ( select a.UserNo as UserNo
+      ,a.LoginName as LoginName
+      ,b.PayType as PayType,
+      sum(b.PayMoney) as PayMoney
+      from UserManage a left join  PayManage b on a.LoginName=b.createuser
+      <dynamic prepend=" where ">
+      <isNotEmpty prepend="and" property="Cashier">
+        a.LoginName= #Cashier#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="StartTime">
+        b.createTime>= #StartTime#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="EndTime">
+        <![CDATA[ b.createTime <= #EndTime# ]]>
+      </isNotEmpty>
+    </dynamic>
+      group by a.LoginName,b.PayType)group by LoginName)group by LoginName
+    </select>
+
+    <!--2.收银员明细表-->
+    <select id="SelectCashierListReport"  parameterClass="Hashtable" resultClass="R_CashierListReport">
+      select distinct
+      a.LoginName as LoginName
+      ,b.OrdersNo as OrdersNo
+      ,b.CreateTime as CreateTime
+      ,case b.PayType when "1" then b.PayMoney else 0 end Pay_Money
+      ,case b.PayType when "2" then b.PayMoney else 0 end Pay_Card
+      from UserManage a left join  PayManage b on a.LoginName=b.createuser
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="Cashier">
+          a.LoginName= #Cashier#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="StartTime">
+          b.createTime>= #StartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="EndTime">
+          <![CDATA[ b.createTime <= #EndTime# ]]>
+        </isNotEmpty>
+      </dynamic>
+    </select>
+
+
+    <!--3.菜品排行榜-->
+    <select id="SelectFoodSalesListReport"  parameterClass="Hashtable" resultClass="R_FoodSalesListReport">
+      select distinct a.MenuCode ,a.MenuName,b.SaleUnit,sum(a.SendCount) as  SendCount,
+      a.MenuPrice,sum(a.PayMoney) as PayMoney from
+      OrdersDetail a left join  MenuManage b on a.MenuCode=b.MenuNo 
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="StartTime">
+          a.createTime>= #StartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="EndTime">
+          <![CDATA[ a.createTime <= #EndTime# ]]>
+        </isNotEmpty>
+      </dynamic>
+      group by a.MenuCode  order by SendCount desc
+    </select>
+
+
+    <!--5.系统人工优惠表-->
+    <select id="SelectSystemPreferentialReport"  parameterClass="Hashtable" resultClass="R_SystemPreferentialReport">
+      select distinct
+      a.LoginName as LoginName,
+      b.OrdersNo as OrdersNo,
+      b.CreateTime as CreateTime,
+      d.SeatNo as SeatNo,
+      d.TotalMoney as TotalMoney,
+      c.DiscountMoney as DiscountMoney
+      from
+      UserManage a  left join PayManage b  on a.LoginName=b.createuser
+      left join  OrdersDiscountManage c on b.OrdersNo=c.OrdersNo
+      left join  OrdersListManage d on b.OrdersNo=d.OrdersNo
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="Cashier">
+          a.LoginName= #Cashier#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="StartTime">
+          b.createTime>= #StartTime#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="EndTime">
+          <![CDATA[ b.createTime <= #EndTime# ]]>
+        </isNotEmpty>
+      </dynamic>
+      and b.OrdersNo in (select OrdersNo from OrdersDiscountManage) group by a.LoginName,b.OrdersNo
+    </select>
+    
+  </statements>
+</sqlMap>

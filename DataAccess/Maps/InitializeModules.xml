@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="InitializeModulesMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="InitializeModules" assembly="DataAccess.dll" type="DataAccess.Domain.InitializeModules" />
+  </alias>
+  <resultMaps>
+    <resultMap id="InitializeModulesResult" class="InitializeModules">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="Initializeid" column="InitializeID" type="string" dbType="varchar"/>
+      <result property="ModuleNo" column="ModuleNo" type="string" dbType="varchar"/>
+      <result property="IsEnable" column="IsEnable" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectInitializeModules" parameterClass="string" resultClass="InitializeModules">
+      SELECT ID AS Id,InitializeID AS Initializeid,ModuleNo AS ModuleNo,IsEnable AS IsEnable,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM InitializeModules
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectAvailableModules" parameterClass="string" resultClass="InitializeModules">
+      SELECT ID AS Id,InitializeID AS Initializeid,ModuleNo AS ModuleNo,IsEnable AS IsEnable
+      FROM InitializeModules
+      <dynamic prepend=" WHERE ">
+        IsEnable=1
+        <isParameterPresent>
+          AND ModuleNo = #value#
+        </isParameterPresent>
+      </dynamic>
+
+    </select>
+    <insert id="InsertInitializeModules" parameterClass="InitializeModules">
+      INSERT INTO InitializeModules
+      (InitializeID,ModuleNo,IsEnable,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#Initializeid#,#ModuleNo#,#IsEnable#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateInitializeModules" parameterClass="InitializeModules">
+      UPDATE InitializeModules
+      SET InitializeID=#Initializeid#,ModuleNo=#ModuleNo#,IsEnable=#IsEnable#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteInitializeModules" parameterClass="string">
+      DELETE FROM InitializeModules
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DepartmentPowerMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="DepartmentPower" assembly="DataAccess.dll" type="DataAccess.Domain.DepartmentPower" />
+  </alias>
+  <resultMaps>
+    <resultMap id="DepartmentPowerResult" class="DepartmentPower">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="DepartmentNo" column="DepartmentNo" type="string" dbType="varchar"/>
+      <result property="ModuleNo" column="ModuleNo" type="string" dbType="varchar"/>
+      <result property="IsValidate" column="IsValidate" type="long" dbType="long"/>
+      <result property="CanAdd" column="CanAdd" type="long" dbType="long"/>
+      <result property="CanUpd" column="CanUpd" type="long" dbType="long"/>
+      <result property="CanDel" column="CanDel" type="long" dbType="long"/>
+      <result property="CanSelect" column="CanSelect" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectDepartmentPower" parameterClass="string" resultClass="DepartmentPower">
+      SELECT ID AS Id,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM DepartmentPower
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <select id="SelectNoDepartmentPower" parameterClass="string" resultClass="DepartmentPower">
+      SELECT ID AS Id,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM DepartmentPower
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          DepartmentNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectModuleDepartmentPower" parameterClass="Hashtable" resultClass="DepartmentPower">
+      SELECT ID AS Id,DepartmentNo AS DepartmentNo,ModuleNo AS ModuleNo,IsValidate AS IsValidate,CanAdd AS CanAdd,CanUpd AS CanUpd,CanDel AS CanDel,CanSelect AS CanSelect,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM DepartmentPower
+      <dynamic prepend=" WHERE ">
+        <isNotEmpty prepend="and" property="sid1">
+          DepartmentNo= #sid1#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="name2">
+          ModuleNo= #name2#
+        </isNotEmpty>
+      </dynamic>
+    </select>
+    <insert id="InsertDepartmentPower" parameterClass="DepartmentPower">
+      INSERT INTO DepartmentPower
+      (DepartmentNo,ModuleNo,IsValidate,CanAdd,CanUpd,CanDel,CanSelect,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#DepartmentNo#,#ModuleNo#,#IsValidate#,#CanAdd#,#CanUpd#,#CanDel#,#CanSelect#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateDepartmentPower" parameterClass="DepartmentPower">
+      UPDATE DepartmentPower
+      SET DepartmentNo=#DepartmentNo#,ModuleNo=#ModuleNo#,IsValidate=#IsValidate#,CanAdd=#CanAdd#,CanUpd=#CanUpd#,CanDel=#CanDel#,CanSelect=#CanSelect#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteDepartmentPower" parameterClass="string">
+      DELETE FROM DepartmentPower
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

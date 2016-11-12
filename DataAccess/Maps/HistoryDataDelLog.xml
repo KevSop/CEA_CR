@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="HistoryDataDelLogMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="HistoryDataDelLog" assembly="DataAccess.dll" type="DataAccess.Domain.HistoryDataDelLog" />
+  </alias>
+  <resultMaps>
+    <resultMap id="HistoryDataDelLogResult" class="HistoryDataDelLog">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="StartTime" column="StartTime" type="DateTime" dbType="DateTime"/>
+      <result property="EndTime" column="EndTime" type="DateTime" dbType="DateTime"/>
+      <result property="IsDelOrderData" column="IsDelOrderData" type="long" dbType="long"/>
+      <result property="IsDelSystemLog" column="IsDelSystemLog" type="long" dbType="long"/>
+      <result property="IsDelPayData" column="IsDelPayData" type="long" dbType="long"/>
+      <result property="OperUser" column="OperUser" type="string" dbType="varchar"/>
+      <result property="OperTime" column="OperTime" type="DateTime" dbType="DateTime"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectHistoryDataDelLog" parameterClass="string" resultClass="HistoryDataDelLog">
+      SELECT ID AS Id,StartTime AS StartTime,EndTime AS EndTime,IsDelOrderData AS IsDelOrderData,IsDelSystemLog AS IsDelSystemLog,IsDelPayData AS IsDelPayData,OperUser AS OperUser,OperTime AS OperTime,Remark AS Remark
+      FROM HistoryDataDelLog
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertHistoryDataDelLog" parameterClass="HistoryDataDelLog">
+      INSERT INTO HistoryDataDelLog
+      (StartTime,EndTime,IsDelOrderData,IsDelSystemLog,IsDelPayData,OperUser,OperTime,Remark)
+      VALUES(#StartTime#,#EndTime#,#IsDelOrderData#,#IsDelSystemLog#,#IsDelPayData#,#OperUser#,#OperTime#,#Remark#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateHistoryDataDelLog" parameterClass="HistoryDataDelLog">
+      UPDATE HistoryDataDelLog
+      SET StartTime=#StartTime#,EndTime=#EndTime#,IsDelOrderData=#IsDelOrderData#,IsDelSystemLog=#IsDelSystemLog#,IsDelPayData=#IsDelPayData#,OperUser=#OperUser#,OperTime=#OperTime#,Remark=#Remark#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteHistoryDataDelLog" parameterClass="string">
+      DELETE FROM HistoryDataDelLog
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

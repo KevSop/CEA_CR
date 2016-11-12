@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PayRecordsMap" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <alias>
+    <typeAlias alias="PayRecords" assembly="DataAccess.dll" type="DataAccess.Domain.PayRecords" />
+  </alias>
+  <resultMaps>
+    <resultMap id="PayRecordsResult" class="PayRecords">
+      <result property="MtpId" column="MtpId" type="string" dbType="varchar"/>
+      <result property="PnrDevId" column="PnrDevId" type="string" dbType="varchar"/>
+      <result property="CustId" column="CustId" type="string" dbType="varchar"/>
+      <result property="XposId" column="XposId" type="string" dbType="varchar"/>
+      <result property="Md5Seed" column="Md5Seed" type="string" dbType="varchar"/>
+      <result property="Md5Key" column="Md5Key" type="string" dbType="varchar"/>
+      <result property="SignState" column="SignState" type="string" dbType="varchar"/>
+      <result property="SignDate" column="SignDate" type="string" dbType="varchar"/>
+      <result property="SignTime" column="SignTime" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectPayRecords" parameterClass="string" resultClass="PayRecords">
+      SELECT MtpId AS MtpId,PnrDevId AS PnrDevId,CustId AS CustId,XposId AS XposId,Md5Seed AS Md5Seed,Md5Key AS Md5Key,SignState AS SignState,SignDate AS SignDate,SignTime AS SignTime
+      FROM PayRecords
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          MtpId = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertPayRecords" parameterClass="PayRecords">
+      INSERT INTO PayRecords
+      (MtpId,PnrDevId,CustId,XposId,Md5Seed,Md5Key,SignState,SignDate,SignTime)
+      VALUES(#MtpId#,#PnrDevId#,#CustId#,#XposId#,#Md5Seed#,#Md5Key#,#SignState#,#SignDate#,#SignTime#)
+    </insert>
+    <update id="UpdatePayRecords" parameterClass="PayRecords">
+      UPDATE PayRecords
+      SET MtpId=#MtpId#,PnrDevId=#PnrDevId#,CustId=#CustId#,XposId=#XposId#,Md5Seed=#Md5Seed#,Md5Key=#Md5Key#,SignState=#SignState#,SignDate=#SignDate#,SignTime=#SignTime#
+      WHERE MtpId = #MtpId#
+    </update>
+    <update id="UpdateSignIn" parameterClass="PayRecords">
+      UPDATE PayRecords
+      SET Md5Key=#Md5Key#,SignState=#SignState#,SignDate=#SignDate#,SignTime=#SignTime#
+      WHERE MtpId = #MtpId#
+    </update>
+    <delete id="DeletePayRecords" parameterClass="string">
+      DELETE FROM PayRecords
+      WHERE MtpId = #value#
+    </delete>
+  </statements>
+</sqlMap>

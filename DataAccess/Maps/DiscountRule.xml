@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="DiscountRuleMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="DiscountRule" assembly="DataAccess.dll" type="DataAccess.Domain.DiscountRule" />
+  </alias>
+  <resultMaps>
+    <resultMap id="DiscountRuleResult" class="DiscountRule">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="RuleNo" column="RuleNo" type="string" dbType="varchar"/>
+      <result property="DiscountNo" column="DiscountNo" type="string" dbType="varchar"/>
+      <result property="MinMoney" column="MinMoney" type="single" dbType="Real"/>
+      <result property="MaxMoney" column="MaxMoney" type="single" dbType="Real"/>
+      <result property="MinCount" column="MinCount" type="long" dbType="long"/>
+      <result property="MaxCount" column="MaxCount" type="long" dbType="long"/>
+      <result property="Discount" column="Discount" type="single" dbType="Real"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectDiscountRule" parameterClass="string" resultClass="DiscountRule">
+      SELECT ID AS Id,RuleNo AS RuleNo,DiscountNo AS DiscountNo,MinMoney AS MinMoney,MaxMoney AS MaxMoney,MinCount AS MinCount,MaxCount AS MaxCount,Discount AS Discount,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM DiscountRule
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectDiscountRuleList" parameterClass="string" resultClass="DiscountRule">
+      SELECT ID AS Id,RuleNo AS RuleNo,DiscountNo AS DiscountNo,MinMoney AS MinMoney,MaxMoney AS MaxMoney,MinCount AS MinCount,MaxCount AS MaxCount,Discount AS Discount,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM DiscountRule
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          DiscountNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+   
+    <insert id="InsertDiscountRule" parameterClass="DiscountRule">
+      INSERT INTO DiscountRule
+      (RuleNo,DiscountNo,MinMoney,MaxMoney,MinCount,MaxCount,Discount,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#RuleNo#,#DiscountNo#,#MinMoney#,#MaxMoney#,#MinCount#,#MaxCount#,#Discount#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateDiscountRule" parameterClass="DiscountRule">
+      UPDATE DiscountRule
+      SET RuleNo=#RuleNo#,DiscountNo=#DiscountNo#,MinMoney=#MinMoney#,MaxMoney=#MaxMoney#,MinCount=#MinCount#,MaxCount=#MaxCount#,Discount=#Discount#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteDiscountRule" parameterClass="string">
+      DELETE FROM DiscountRule
+      WHERE ID = #value#
+    </delete>
+
+
+    <delete id="DeleteDiscountRuleList" parameterClass="string">
+      DELETE FROM DiscountRule
+      WHERE DiscountNo = #value#
+    </delete>
+
+    <select id="SelectDiscountRuleList11" parameterClass="string" resultClass="DiscountRule">
+      SELECT RuleNo,MinCount,MaxCount,MinMoney,MaxMoney,Discount from DiscountRule
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          DiscountNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectDiscountRuleList12" parameterClass="string" resultClass="DiscountRule">
+      SELECT * from  DiscountMaster a , DiscountRule b where a.DiscountNo=b.DiscountNo and a.IsDelete=0
+      <isNotEmpty prepend="and" property="XTime">
+        <![CDATA[ StartTime <= #XTime# ]]>
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="ETime">
+        EndTime>=#ETime#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="MenuTeek">
+        DiscountDay like '%$MenuTeek$%'
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="Meunmack">
+        MarketCode= #Meunmack#
+      </isNotEmpty>
+      
+    </select>
+  </statements>
+</sqlMap>

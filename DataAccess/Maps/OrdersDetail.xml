@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="OrdersDetailMap"  xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="OrdersDetail" assembly="DataAccess.dll" type="DataAccess.Domain.OrdersDetail" />
+  </alias>
+  <resultMaps>
+    <resultMap id="OrdersDetailResult" class="OrdersDetail">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="TransNo" column="TransNo" type="string" dbType="varchar"/>
+      <result property="OrdersNo" column="OrdersNo" type="string" dbType="varchar"/>
+      <result property="MenuCode" column="MenuCode" type="string" dbType="varchar"/>
+      <result property="MenuName" column="MenuName" type="string" dbType="varchar"/>
+      <result property="MenuPrice" column="MenuPrice" type="single" dbType="Real"/>
+      <result property="SendCount" column="SendCount" type="long" dbType="long"/>
+      <result property="TotalMoney" column="TotalMoney" type="single" dbType="Real"/>
+      <result property="DiscountMoney" column="DiscountMoney" type="single" dbType="Real"/>
+      <result property="PayMoney" column="PayMoney" type="single" dbType="Real"/>
+      <result property="PayWay" column="PayWay" type="string" dbType="varchar"/>
+      <result property="Set1Value" column="Set1_Value" type="string" dbType="varchar"/>
+      <result property="Set2Value" column="Set2_Value" type="string" dbType="varchar"/>
+      <result property="Set3Value" column="Set3_Value" type="string" dbType="varchar"/>
+      <result property="Set4Value" column="Set4_Value" type="string" dbType="varchar"/>
+      <result property="SaleUnit" column="SaleUnit" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+      <result property="MainItemsNo" column="MainItemsNo" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <parameterMaps>
+    <parameterMap id="MyOrdersDetail" class="Hashtable">
+
+      <parameter property="startDate" />
+      <parameter property="endDate" />
+
+    </parameterMap>
+  </parameterMaps>
+  <statements>
+
+    <select id="SelectOrdersDetail" parameterClass="string" resultClass="OrdersDetail">
+      SELECT ID AS Id,TransNo AS TransNo,OrdersNo AS OrdersNo,MenuCode AS MenuCode,MenuName AS MenuName,MenuPrice AS MenuPrice,SendCount AS SendCount,TotalMoney AS TotalMoney,DiscountMoney AS DiscountMoney,PayMoney AS PayMoney,PayWay AS PayWay,Set1_Value AS Set1Value,Set2_Value AS Set2Value,Set3_Value AS Set3Value,Set4_Value AS Set4Value,SaleUnit AS SaleUnit,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime,MainItemsNo AS MainItemsNo
+      FROM OrdersDetail
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="SelectOrdersDetail2" parameterClass="string" resultClass="OrdersDetail">
+      SELECT *
+      FROM OrdersDetail where OrdersNo=#value#
+
+    </select>
+    <insert id="InsertOrdersDetail" parameterClass="OrdersDetail">
+      INSERT INTO OrdersDetail
+      (TransNo,OrdersNo,MenuCode,MenuName,MenuPrice,SendCount,TotalMoney,DiscountMoney,PayMoney,PayWay,Set1_Value,Set2_Value,Set3_Value,Set4_Value,SaleUnit,CreateUser,CreateTime,UpdUser,UpdTime,MainItemsNo)
+      VALUES(#TransNo#,#OrdersNo#,#MenuCode#,#MenuName#,#MenuPrice#,#SendCount#,#TotalMoney#,#DiscountMoney#,#PayMoney#,#PayWay#,#Set1Value#,#Set2Value#,#Set3Value#,#Set4Value#,#SaleUnit#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#,#MainItemsNo#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateOrdersDetail" parameterClass="OrdersDetail">
+      UPDATE OrdersDetail
+      SET TransNo=#TransNo#,OrdersNo=#OrdersNo#,MenuCode=#MenuCode#,MenuName=#MenuName#,MenuPrice=#MenuPrice#,SendCount=#SendCount#,TotalMoney=#TotalMoney#,DiscountMoney=#DiscountMoney#,PayMoney=#PayMoney#,PayWay=#PayWay#,Set1_Value=#Set1Value#,Set2_Value=#Set2Value#,Set3_Value=#Set3Value#,Set4_Value=#Set4Value#,SaleUnit=#SaleUnit#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#,MainItemsNo=#MainItemsNo#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteOrdersDetail" parameterClass="string">
+      DELETE FROM OrdersDetail
+      WHERE ID = #value#
+    </delete>
+    <delete id="DeleteOrdersDetail2" parameterClass="string">
+      DELETE FROM OrdersDetail
+      WHERE OrdersNo = #value#
+    </delete>
+    <delete id="DeleteOrdersDetailPay" parameterMap="MyOrdersDetail">
+      DELETE FROM OrdersDetail WHERE OrdersNo IN(SELECT OrdersNo FROM PayManage
+      <dynamic prepend=" where ">
+        <isNotEmpty prepend="and" property="startDate">
+          OwnerTime>= #startDate#
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="endDate">
+          <![CDATA[ OwnerTime <= #endDate#) ]]>
+        </isNotEmpty>
+      </dynamic>
+    </delete>
+    <delete id="DeleteOrdersDetailOwner" parameterMap="MyOrdersDetail">
+      DELETE FROM OrdersDetail 
+      <dynamic prepend=" where ">
+      <isNotEmpty prepend="and" property="startDate">
+        CreateTime>= #startDate#
+      </isNotEmpty>
+      <isNotEmpty prepend="and" property="endDate">
+        <![CDATA[ CreateTime <= #endDate# ]]>
+      </isNotEmpty>
+      and OrdersNo not in(Select OrdersNo from PayManage)
+    </dynamic>
+    </delete>
+  </statements>
+</sqlMap>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="PrintPlanManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="PrintPlanManage" assembly="DataAccess.dll" type="DataAccess.Domain.PrintPlanManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="PrintPlanManageResult" class="PrintPlanManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="PlanNo" column="PlanNo" type="string" dbType="varchar"/>
+      <result property="PlanName" column="PlanName" type="string" dbType="varchar"/>
+      <result property="IsEnable" column="IsEnable" type="long" dbType="long"/>
+      <result property="PrintCount" column="PrintCount" type="long" dbType="long"/>
+      <result property="OrderType" column="OrderType" type="string" dbType="varchar"/>
+      <result property="Printer" column="Printer" type="string" dbType="varchar"/>
+      <result property="PrintMenu" column="PrintMenu" type="string" dbType="varchar"/>
+      <result property="PrintArea" column="PrintArea" type="string" dbType="varchar"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectPrintPlanManage" parameterClass="string" resultClass="PrintPlanManage">
+      SELECT ID AS Id,PlanNo AS PlanNo,PlanName AS PlanName,IsEnable AS IsEnable,PrintCount AS PrintCount,OrderType AS OrderType,Printer AS Printer,PrintMenu AS PrintMenu,PrintArea AS PrintArea,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM PrintPlanManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <select id="ISPlanNameExitsPrintPlanManage" parameterClass="string" resultClass="PrintPlanManage">
+      SELECT ID AS Id,PlanNo AS PlanNo,PlanName AS PlanName,IsEnable AS IsEnable,PrintCount AS PrintCount,OrderType AS OrderType,Printer AS Printer,PrintMenu AS PrintMenu,PrintArea AS PrintArea,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM PrintPlanManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          PlanName = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+	  <select id="ISExitsSelectPrintPlanManage" parameterClass="string" resultClass="PrintPlanManage">
+		  SELECT ID AS Id,PlanNo AS PlanNo,PlanName AS PlanName,IsEnable AS IsEnable,PrintCount AS PrintCount,OrderType AS OrderType,Printer AS Printer,PrintMenu AS PrintMenu,PrintArea AS PrintArea,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+		  FROM PrintPlanManage
+		  <dynamic prepend="WHERE">
+			  <isNotEmpty prepend="and" property="printArea">
+				  PrintArea= #printArea#
+			  </isNotEmpty>
+		  </dynamic>
+	  </select>
+    <insert id="InsertPrintPlanManage" parameterClass="PrintPlanManage">
+      INSERT INTO PrintPlanManage
+      (PlanNo,PlanName,IsEnable,PrintCount,OrderType,Printer,PrintMenu,PrintArea,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#PlanNo#,#PlanName#,#IsEnable#,#PrintCount#,#OrderType#,#Printer#,#PrintMenu#,#PrintArea#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdatePrintPlanManage" parameterClass="PrintPlanManage">
+      UPDATE PrintPlanManage
+      SET PlanNo=#PlanNo#,PlanName=#PlanName#,IsEnable=#IsEnable#,PrintCount=#PrintCount#,OrderType=#OrderType#,Printer=#Printer#,PrintMenu=#PrintMenu#,PrintArea=#PrintArea#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeletePrintPlanManage" parameterClass="string">
+      DELETE FROM PrintPlanManage
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>

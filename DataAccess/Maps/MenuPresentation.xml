@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="MenuPresentationMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="MenuPresentation" assembly="DataAccess.dll" type="DataAccess.Domain.MenuPresentation" />
+  </alias>
+  <resultMaps>
+    <resultMap id="MenuPresentationResult" class="MenuPresentation">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="RuleNo" column="RuleNo" type="string" dbType="varchar"/>
+      <result property="MenuNo" column="MenuNo" type="string" dbType="varchar"/>
+      <result property="PresCount" column="PresCount" type="long" dbType="long"/>
+      <result property="Relationship" column="Relationship" type="long" dbType="long"/>
+      <result property="CreateUser" column="CreateUser" type="string" dbType="varchar"/>
+      <result property="CreateTime" column="CreateTime" type="DateTime" dbType="DateTime"/>
+      <result property="UpdUser" column="UpdUser" type="string" dbType="varchar"/>
+      <result property="UpdTime" column="UpdTime" type="DateTime" dbType="DateTime"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectMenuPresentation" parameterClass="string" resultClass="MenuPresentation">
+      SELECT ID AS Id,RuleNo AS RuleNo,MenuNo AS MenuNo,PresCount AS PresCount,Relationship AS Relationship,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM MenuPresentation
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertMenuPresentation" parameterClass="MenuPresentation">
+      INSERT INTO MenuPresentation
+      (RuleNo,MenuNo,PresCount,Relationship,CreateUser,CreateTime,UpdUser,UpdTime)
+      VALUES(#RuleNo#,#MenuNo#,#PresCount#,#Relationship#,#CreateUser#,#CreateTime#,#UpdUser#,#UpdTime#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateMenuPresentation" parameterClass="MenuPresentation">
+      UPDATE MenuPresentation
+      SET RuleNo=#RuleNo#,MenuNo=#MenuNo#,PresCount=#PresCount#,Relationship=#Relationship#,CreateUser=#CreateUser#,CreateTime=#CreateTime#,UpdUser=#UpdUser#,UpdTime=#UpdTime#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteMenuPresentation" parameterClass="string">
+      DELETE FROM MenuPresentation
+      WHERE ID = #value#
+    </delete>
+    <delete id="DeleteMenuPresentationList" parameterClass="string">
+      DELETE FROM MenuPresentation
+      WHERE RuleNo = #value#
+    </delete>
+    <select id="SelectMenuPresentationList" parameterClass="string" resultClass="MenuPresentation">
+      SELECT ID AS Id,RuleNo AS RuleNo,MenuNo AS MenuNo,PresCount AS PresCount,Relationship AS Relationship,CreateUser AS CreateUser,CreateTime AS CreateTime,UpdUser AS UpdUser,UpdTime AS UpdTime
+      FROM MenuPresentation
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          RuleNo = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+  </statements>
+</sqlMap>

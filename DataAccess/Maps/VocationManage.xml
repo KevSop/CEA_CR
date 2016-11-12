@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="VocationManageMap"   xmlns="http://ibatis.apache.org/mapping"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="SqlMap.xsd">
+  <alias>
+    <typeAlias alias="VocationManage" assembly="DataAccess.dll" type="DataAccess.Domain.VocationManage" />
+  </alias>
+  <resultMaps>
+    <resultMap id="VocationManageResult" class="VocationManage">
+      <result property="Id" column="ID" type="long" dbType="long"/>
+      <result property="VocationNo" column="VocationNo" type="string" dbType="varchar"/>
+      <result property="VocationName" column="VocationName" type="string" dbType="varchar"/>
+      <result property="IsDisable" column="IsDisable" type="long" dbType="long"/>
+      <result property="Remark" column="Remark" type="string" dbType="varchar"/>
+    </resultMap>
+  </resultMaps>
+  <statements>
+
+    <select id="SelectVocationManage" parameterClass="string" resultClass="VocationManage">
+      SELECT ID AS Id,VocationNo AS VocationNo,VocationName AS VocationName,IsDisable AS IsDisable,Remark AS Remark
+      FROM VocationManage
+      <dynamic prepend="WHERE">
+        <isParameterPresent>
+          ID = #value#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <insert id="InsertVocationManage" parameterClass="VocationManage">
+      INSERT INTO VocationManage
+      (VocationNo,VocationName,IsDisable,Remark)
+      VALUES(#VocationNo#,#VocationName#,#IsDisable#,#Remark#)
+      <selectKey resultClass="long" type="post" property="Id">
+        SELECT LAST_INSERT_ROWID() as value
+      </selectKey>
+    </insert>
+    <update id="UpdateVocationManage" parameterClass="VocationManage">
+      UPDATE VocationManage
+      SET VocationNo=#VocationNo#,VocationName=#VocationName#,IsDisable=#IsDisable#,Remark=#Remark#
+      WHERE ID = #Id#
+    </update>
+    <delete id="DeleteVocationManage" parameterClass="string">
+      DELETE FROM VocationManage
+      WHERE ID = #value#
+    </delete>
+  </statements>
+</sqlMap>
