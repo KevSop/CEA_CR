@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="搜索条件" Name="txtTitle" Padding="10,8,0,0" Background="#FFEEE7DE" Grid.Row="0" Grid.Column="0" FontFamily="Microsoft YaHei" FontSize="24" Foreground="#FF675446" />
         <Button Grid.Row="0" Grid.Column="1" Background="#FFEEE7DE" BorderThickness="0" Click="btnClose_Click" Style="{DynamicResource ResourceKey=ColsedButtonStyle}" Name="btnClose" />
-        <my:UserTextBox Grid.Row="1" HorizontalAlignment="Center" Margin="98,43,48,0" x:Name="txtStudentValue"   VerticalAlignment="Top" UserLblText="学生">
+        <my:UserTextBox Grid.Row="1" HorizontalAlignment="Center" Margin="98,43,48,0" x:Name="txtStudentValue"   VerticalAlignment="Top" UserLblText="身份证号">
             <Event:Interaction.Triggers>
                 <Event:EventTrigger EventName="GotFocus">
                     <Event:InvokeCommandAction Command="{Binding GotFocusCommand}" CommandParameter="{Binding ElementName=Keyboard}" />
@@ -39,8 +39,7 @@
                 </Event:EventTrigger>
             </Event:Interaction.Triggers>
         </my:UserTextBox>
-        <my:UserDataPicker HorizontalAlignment="Left" Margin="98,149,0,0" x:Name="txtStartValue" VerticalAlignment="Top" UserLableText="开课起始时间" Height="50" Canvas.Left="169" Canvas.Top="146" Grid.Row="1" />
-        <my:UserDataPicker HorizontalAlignment="Left" Margin="98,254,0,0" x:Name="txtEndValue" VerticalAlignment="Top" UserLableText="开课结束时间" Height="50" Canvas.Left="169" Canvas.Top="146" Grid.Row="1" />
+        <my:UserDataPicker HorizontalAlignment="Left" Margin="98,149,0,0" x:Name="txtStartValue" VerticalAlignment="Top" UserLableText="开课月份" Height="50" Canvas.Left="169" Canvas.Top="146" Grid.Row="1" />
 
         <Border Grid.ColumnSpan="2" Grid.Row="2" Background="#FFEEE7DE">
             <Button Height="50" Width="150"  Content="{x:Static properties:Resources.Search}" Style="{StaticResource ResourceKey=MainButtonstyle150}" Click="Button_Click" />

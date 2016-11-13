@@ -31,15 +31,15 @@ namespace Framework
             get { return txtRoomValue.Text; }
             set { txtRoomValue.Text = value; }
         }
-        public DateTime StartValue {
-            get { return txtStartValue.SelectedDate; }
-            set { txtStartValue.SelectedDate = value; }
-        }
-        public DateTime EndValue
-        {
-            get { return txtEndValue.SelectedDate; }
-            set { txtEndValue.SelectedDate = value; }
-        }
+        //public DateTime StartValue {
+        //    get { return txtStartValue.SelectedDate; }
+        //    set { txtStartValue.SelectedDate = value; }
+        //}
+        //public DateTime EndValue
+        //{
+        //    get { return txtEndValue.SelectedDate; }
+        //    set { txtEndValue.SelectedDate = value; }
+        //}
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

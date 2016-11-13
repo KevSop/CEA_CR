@@ -22,6 +22,7 @@ using System.ComponentModel.Composition;
 using System.Data;
 using System.Threading;
 using CEA_CR.Data.Entity;
+using CEA_CR.PlatForm.Utils;
 
 namespace CEA_CR.PlatForm.ViewModels
 {
@@ -53,7 +54,8 @@ namespace CEA_CR.PlatForm.ViewModels
                 if (_currentObject == null)
                 {
                     _currentObject = new StudentInfoVModel();
-                    _currentObject.tbStudentInfo = new StudentInfo();
+                    _currentObject.info = new CourseScheduleResponse();
+                    //_currentObject.tbStudentInfo = new StudentInfo();
                 }
                 return _currentObject;
             }
@@ -226,9 +228,14 @@ namespace CEA_CR.PlatForm.ViewModels
                         if (sb.ShowDialog().Value)
                         {
                             List<StudentInfoVModel> searchResult = new List<StudentInfoVModel>();
-                            searchResult.Add(new StudentInfoVModel { CourseName="查询出来的课程", ClassRoom = "阶梯教室", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbStudentInfo = new StudentInfo { Name = sb.StudentSearch } });
+                            //searchResult.Add(new StudentInfoVModel { CourseName="查询出来的课程", ClassRoom = "阶梯教室", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbStudentInfo = new StudentInfo { Name = sb.StudentSearch } });
                             //此处调用查询接口查询结果
-
+                            HttpDataService service = new HttpDataService();
+                            List<CourseScheduleResponse> currentCourse = service.GetCourseSchedule(sb.StudentSearch, sb.StartValue.ToString("yyyy-MM-dd"), "学生", "1");
+                            foreach (var item in currentCourse)
+                            {
+                                searchResult.Add(new StudentInfoVModel { info = item });
+                            }
                             studentInfoPageModel.ResetData(searchResult);
                             _currentPage = 1;
                             lvMain.ItemsSource = DisplayList;
@@ -273,14 +280,13 @@ namespace CEA_CR.PlatForm.ViewModels
                         StudentInfoVModel code = lv.SelectedItem as StudentInfoVModel;
                         if (code != null)
                         {
-                            //弹出教师介绍
-                            var t = code.tbStudentInfo;
+                            var t = code.info;
                             if (t != null)
                             {
-                                CurrentObject.tbStudentInfo.Name = t.Name;
+                                CurrentObject.info.courseName = t.courseName;
                                 Framework.MessageBox mb = new Framework.MessageBox();
-                                mb.Title = CurrentObject.tbStudentInfo.Name;
-                                mb.Message = "这里显示对该课程的介绍！";
+                                mb.Title = CurrentObject.info.courseName;
+                                mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time + ", 开课地点：" + t.place;
                                 mb.Topmost = true;
                                 mb.ShowDialog();
                             }

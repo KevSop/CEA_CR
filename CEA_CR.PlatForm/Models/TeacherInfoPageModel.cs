@@ -10,11 +10,12 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using System.Xml.Linq;
 using CEA_CR.Data.Entity;
+using CEA_CR.PlatForm.Utils;
 
 namespace CEA_CR.PlatForm.Models
 {
     //原始库里的对象转换成前台要看的对象
-    public class TeacherInfoVModel : NotificationObject
+    public class TeacherInfoVModel_old : NotificationObject
     {
         public TeacherInfo tbTeacherInfo { get; set; }
 
@@ -23,6 +24,10 @@ namespace CEA_CR.PlatForm.Models
         public string CourseName { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
+    }
+    public class TeacherInfoVModel : NotificationObject
+    {
+        public CourseScheduleResponse info { get; set; }
     }
 
     //页面对象
@@ -45,11 +50,11 @@ namespace CEA_CR.PlatForm.Models
         public TeacherInfoPageModel()
         {
             List<TeacherInfoVModel> list = new List<TeacherInfoVModel>();
-            for (int i = 1; i < 101; i++)
-            {
-                list.Add(new TeacherInfoVModel { ClassRoom = "教室" + i.ToString(), StartTime = "2016-10-10 09:00", EndTime = "2016-10-10 11:00", CourseName = "课程" + i.ToString(), tbTeacherInfo = new TeacherInfo { Name = "老师" + i.ToString() } });
+            //for (int i = 1; i < 101; i++)
+            //{
+            //    list.Add(new TeacherInfoVModel { ClassRoom = "教室" + i.ToString(), StartTime = "2016-10-10 09:00", EndTime = "2016-10-10 11:00", CourseName = "课程" + i.ToString(), tbTeacherInfo = new TeacherInfo { Name = "老师" + i.ToString() } });
 
-            }
+            //}
             ResetData(list);
         }
 

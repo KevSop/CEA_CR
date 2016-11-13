@@ -44,11 +44,11 @@
             <ListView AlternationCount="2" Name="lvMain" Margin="10,21,10,76" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{DynamicResource ListViewStyle}" ItemContainerStyle="{DynamicResource ListViewItemStyle}" HorizontalContentAlignment="Stretch"  my:ListViewBehavior.HeaderSort="True" Width="1004" Grid.ColumnSpan="2" >
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Width="200" Header="课程名称" DisplayMemberBinding="{Binding Path= CourseName}" my:ListViewBehavior.SortField="CourseName"></GridViewColumn>
-                        <GridViewColumn Width="200" Header="授课教室" DisplayMemberBinding="{Binding Path= tbClassRoomInfo.Name}" my:ListViewBehavior.SortField="tbClassRoomInfo.Name"></GridViewColumn>
-                        <GridViewColumn Width="200" Header="带课老师" DisplayMemberBinding="{Binding Path= TeacherName}" my:ListViewBehavior.SortField="TeacherName"></GridViewColumn>
-                        <GridViewColumn Width="200" Header="授课开始时间" DisplayMemberBinding="{Binding Path= StartTime}" my:ListViewBehavior.SortField="StartTime"></GridViewColumn>
-                        <GridViewColumn Width="200" Header="授课结束时间" DisplayMemberBinding="{Binding Path= EndTime}" my:ListViewBehavior.SortField="EndTime"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="课程编号" DisplayMemberBinding="{Binding Path= info.courseId}" my:ListViewBehavior.SortField="info.courseId"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="课程名称" DisplayMemberBinding="{Binding Path= info.courseName}" my:ListViewBehavior.SortField="info.courseName"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="班级编号" DisplayMemberBinding="{Binding Path= info.classId}" my:ListViewBehavior.SortField="info.classId"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="班级名称" DisplayMemberBinding="{Binding Path= info.className}" my:ListViewBehavior.SortField="info.className"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="授课时间" DisplayMemberBinding="{Binding Path= info.time}" my:ListViewBehavior.SortField="info.time"></GridViewColumn>
                     </GridView>
                 </ListView.View>
                 <Event:Interaction.Triggers>

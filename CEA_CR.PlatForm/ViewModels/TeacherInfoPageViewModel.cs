@@ -22,6 +22,7 @@ using System.ComponentModel.Composition;
 using System.Data;
 using System.Threading;
 using CEA_CR.Data.Entity;
+using CEA_CR.PlatForm.Utils;
 
 namespace CEA_CR.PlatForm.ViewModels
 {
@@ -53,7 +54,8 @@ namespace CEA_CR.PlatForm.ViewModels
                 if (_currentObject == null)
                 {
                     _currentObject = new TeacherInfoVModel();
-                    _currentObject.tbTeacherInfo = new TeacherInfo();
+                    _currentObject.info = new CourseScheduleResponse();
+                    //_currentObject.tbTeacherInfo = new TeacherInfo();
                 }
                 return _currentObject;
             }
@@ -167,7 +169,7 @@ namespace CEA_CR.PlatForm.ViewModels
                 return _pageDown;
             }
         }
-        
+
 
         #region 窗体载入事件
         private ICommand _onLoaded;
@@ -226,9 +228,14 @@ namespace CEA_CR.PlatForm.ViewModels
                         if (sb.ShowDialog().Value)
                         {
                             List<TeacherInfoVModel> searchResult = new List<TeacherInfoVModel>();
-                            searchResult.Add(new TeacherInfoVModel { ClassRoom = "阶梯教室", CourseName = "查询课程", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbTeacherInfo = new TeacherInfo { Name = sb.TeacherSearch } });
+                            //searchResult.Add(new TeacherInfoVModel { ClassRoom = "阶梯教室", CourseName = "查询课程", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbTeacherInfo = new TeacherInfo { Name = sb.TeacherSearch } });
                             //此处调用查询接口查询结果
-
+                            HttpDataService service = new HttpDataService();
+                            List<CourseScheduleResponse> currentCourse = service.GetCourseSchedule(sb.TeacherSearch, sb.StartValue.ToString("yyyy-MM-dd"), "老师", "1");
+                            foreach (var item in currentCourse)
+                            {
+                                searchResult.Add(new TeacherInfoVModel { info = item });
+                            }
                             teacherInfoPageModel.ResetData(searchResult);
                             _currentPage = 1;
                             lvMain.ItemsSource = DisplayList;
@@ -273,14 +280,13 @@ namespace CEA_CR.PlatForm.ViewModels
                         TeacherInfoVModel code = lv.SelectedItem as TeacherInfoVModel;
                         if (code != null)
                         {
-                            //弹出教师介绍
-                            var t = code.tbTeacherInfo;
+                            var t = code.info;
                             if (t != null)
                             {
-                                CurrentObject.tbTeacherInfo.Name = t.Name;
+                                CurrentObject.info.courseName = t.courseName;
                                 Framework.MessageBox mb = new Framework.MessageBox();
-                                mb.Title = CurrentObject.tbTeacherInfo.Name;
-                                mb.Message = "这里显示对该课程的介绍！";
+                                mb.Title = CurrentObject.info.courseName;
+                                mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time + ", 开课地点：" + t.place;
                                 mb.Topmost = true;
                                 mb.ShowDialog();
                             }

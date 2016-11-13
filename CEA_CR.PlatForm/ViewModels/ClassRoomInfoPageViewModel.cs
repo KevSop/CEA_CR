@@ -54,7 +54,8 @@ namespace CEA_CR.PlatForm.ViewModels
                 if (_currentObject == null)
                 {
                     _currentObject = new ClassRoomInfoVModel();
-                    _currentObject.tbClassRoomInfo = new ClassRoomInfo();
+                    _currentObject.info = new CurrentCourseResponse();
+                    //_currentObject.tbClassRoomInfo = new ClassRoomInfo();
                 }
                 return _currentObject;
             }
@@ -168,7 +169,7 @@ namespace CEA_CR.PlatForm.ViewModels
                 return _pageDown;
             }
         }
-        
+
 
         #region 窗体载入事件
         private ICommand _onLoaded;
@@ -228,12 +229,13 @@ namespace CEA_CR.PlatForm.ViewModels
                         {
                             List<ClassRoomInfoVModel> searchResult = new List<ClassRoomInfoVModel>();
                             //此处过滤查询 Mark todo
-                            //HttpDataService service = new HttpDataService();
-                            //List<CurrentCourseResponse> currentCourse = service.GetCurrentCourse(sb.RoomSearch);
-                            //对象转换
-
-
-                            searchResult.Add(new ClassRoomInfoVModel { CourseName = "搜索课程", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbClassRoomInfo = new ClassRoomInfo { Name = sb.RoomSearch } });
+                            HttpDataService service = new HttpDataService();
+                            List<CurrentCourseResponse> currentCourse = service.GetCurrentCourse(sb.RoomSearch);
+                            foreach (var item in currentCourse)
+                            {
+                                searchResult.Add(new ClassRoomInfoVModel { info = item });
+                            }
+                            //searchResult.Add(new ClassRoomInfoVModel { CourseName = "搜索课程", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbClassRoomInfo = new ClassRoomInfo { Name = sb.RoomSearch } });
                             //此处调用查询接口查询结果
 
                             classRoomInfoPageModel.ResetData(searchResult);
@@ -281,13 +283,16 @@ namespace CEA_CR.PlatForm.ViewModels
                         if (code != null)
                         {
                             //弹出教室介绍
-                            var t = code.tbClassRoomInfo;
+                            //var t = code.tbClassRoomInfo;
+                            var t = code.info;
                             if (t != null)
                             {
-                                CurrentObject.tbClassRoomInfo.Name = t.Name;
+                                CurrentObject.info.className = t.courseName;
+                                //CurrentObject.tbClassRoomInfo.Name = t.Name;
                                 Framework.MessageBox mb = new Framework.MessageBox();
-                                mb.Title = CurrentObject.tbClassRoomInfo.Name;
-                                mb.Message = "这里显示对该课程的介绍！";
+                                //mb.Title = CurrentObject.tbClassRoomInfo.Name;
+                                mb.Title = CurrentObject.info.courseName;
+                                mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time;
                                 mb.Topmost = true;
                                 mb.ShowDialog();
                             }

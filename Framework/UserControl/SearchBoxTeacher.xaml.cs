@@ -35,11 +35,11 @@ namespace Framework
             get { return txtStartValue.SelectedDate; }
             set { txtStartValue.SelectedDate = value; }
         }
-        public DateTime EndValue
-        {
-            get { return txtEndValue.SelectedDate; }
-            set { txtEndValue.SelectedDate = value; }
-        }
+        //public DateTime EndValue
+        //{
+        //    get { return txtEndValue.SelectedDate; }
+        //    set { txtEndValue.SelectedDate = value; }
+        //}
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;

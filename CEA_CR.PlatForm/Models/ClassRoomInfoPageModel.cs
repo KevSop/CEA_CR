@@ -15,7 +15,7 @@ using CEA_CR.PlatForm.Utils;
 namespace CEA_CR.PlatForm.Models
 {
     //原始库里的对象转换成前台要看的对象
-    public class ClassRoomInfoVModel : NotificationObject
+    public class ClassRoomInfoVModel_old : NotificationObject
     {
         public ClassRoomInfo tbClassRoomInfo { get; set; }
         public string CourseName { get; set; }
@@ -23,6 +23,12 @@ namespace CEA_CR.PlatForm.Models
         public string TeacherName { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
+    }
+
+    //原始库里的对象转换成前台要看的对象
+    public class ClassRoomInfoVModel : NotificationObject
+    {
+        public CurrentCourseResponse info { get; set; }
     }
 
     //页面对象
@@ -46,11 +52,11 @@ namespace CEA_CR.PlatForm.Models
         {
             List<ClassRoomInfoVModel> list = new List<ClassRoomInfoVModel>();
             //此处查询所有 Mark todo
-            for (int i = 1; i < 101; i++)
-            {
-                list.Add(new ClassRoomInfoVModel { CourseName = "课程" + i.ToString(), StartTime = "2016-10-10 09:00", EndTime = "2016-10-10 11:00", TeacherName = "老师" + i.ToString(), tbClassRoomInfo = new ClassRoomInfo { Name = "教室" + i.ToString() } });
+            //for (int i = 1; i < 101; i++)
+            //{
+            //    list.Add(new ClassRoomInfoVModel { info = new CurrentCourseResponse { classId = "班级编号" + i.ToString(), className = "班级名称" + i.ToString(), courseId = "课程编号" + i.ToString(), courseName = "课程名称" + i.ToString(), time = "开课时间" } });
 
-            }
+            //}
             ResetData(list);
         }
 

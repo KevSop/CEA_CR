@@ -12,7 +12,7 @@
         <Viewbox Stretch="Fill">
             <Grid Width="1000">
                 <TextBlock Text="东航多媒体查询系统" Margin="400,5,482,371" />
-                <Framework:DishesButton x:Name="CoursePart" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top" DishesName="课程查询"/>
+                <Framework:DishesButton Visibility="Hidden" x:Name="CoursePart" HorizontalAlignment="Left" Margin="100,40,0,0" VerticalAlignment="Top" DishesName="课程查询"/>
                 <Framework:DishesButton x:Name="RoomPart" HorizontalAlignment="Left" Margin="400,40,0,0" VerticalAlignment="Top" DishesName="教室查询"/>
                 <Framework:DishesButton x:Name="TeacherPart" HorizontalAlignment="Left" Margin="700,40,0,0" VerticalAlignment="Top" DishesName="教师查询"/>
                 <Framework:DishesButton x:Name="StudentPart" HorizontalAlignment="Left" Margin="100,240,0,40" VerticalAlignment="Top" DishesName="学员查询"/>
