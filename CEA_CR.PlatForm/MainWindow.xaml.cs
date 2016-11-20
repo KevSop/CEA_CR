@@ -44,8 +44,8 @@ namespace CEA_CR.PlatForm
         void CoursePart_ButtonClick(object sender, RoutedEventArgs e)
         {
             //原主界面不用管，新打开的在上层
-            ClassInfoPageView ci = new ClassInfoPageView();
-            ci.Show();
+            //ClassInfoPageView ci = new ClassInfoPageView();
+            //ci.Show();
         }
 
         void RoomPart_ButtonClick(object sender, RoutedEventArgs e)

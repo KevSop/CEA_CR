@@ -21,7 +21,6 @@ using System.Text.RegularExpressions;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Threading;
-using CEA_CR.Data.Entity;
 using CEA_CR.PlatForm.Utils;
 
 namespace CEA_CR.PlatForm.ViewModels

@@ -9,22 +9,10 @@ using IBatisNet.DataMapper;
 using System.Collections.ObjectModel;
 using System.Collections;
 using System.Xml.Linq;
-using CEA_CR.Data.Entity;
 using CEA_CR.PlatForm.Utils;
 
 namespace CEA_CR.PlatForm.Models
 {
-    //原始库里的对象转换成前台要看的对象
-    public class StudentInfoVModel_old : NotificationObject
-    {
-        public StudentInfo tbStudentInfo { get; set; }
-        public string CourseName { get; set; }
-        public string ClassRoom { get; set; }
-
-        public string TeacherName { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
-    }
     public class StudentInfoVModel : NotificationObject
     {
         public CourseScheduleResponse info { get; set; }

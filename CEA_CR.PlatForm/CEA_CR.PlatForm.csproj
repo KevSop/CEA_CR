@@ -111,14 +111,12 @@
     <Compile Include="Models\StudentInfoPageModel.cs" />
     <Compile Include="Models\TeacherInfoPageModel.cs" />
     <Compile Include="Models\ClassRoomInfoPageModel.cs" />
-    <Compile Include="Models\ClassInfoPageModel.cs" />
     <Compile Include="Utils\ConfigStatic.cs" />
     <Compile Include="Utils\HttpDataService.cs" />
     <Compile Include="Utils\HttpHelper.cs" />
     <Compile Include="ViewModels\StudentInfoPageViewModel.cs" />
     <Compile Include="ViewModels\TeacherInfoPageViewModel.cs" />
     <Compile Include="ViewModels\ClassRoomInfoPageViewModel.cs" />
-    <Compile Include="ViewModels\ClassInfoPageViewModel.cs" />
     <Compile Include="Views\CompusPageView.xaml.cs">
       <DependentUpon>CompusPageView.xaml</DependentUpon>
     </Compile>
@@ -133,9 +131,6 @@
     </Compile>
     <Compile Include="Views\ClassRoomInfoPageView.xaml.cs">
       <DependentUpon>ClassRoomInfoPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ClassInfoPageView.xaml.cs">
-      <DependentUpon>ClassInfoPageView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -169,10 +164,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ClassInfoPageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -203,9 +194,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CEA_CR.Data\CEA_CR.Data.csproj">
-      <Project>{aa34e41f-4571-4550-a31d-2ffacb4992bd}</Project>
-      <Name>CEA_CR.Data</Name>
+    <ProjectReference Include="..\CEA_EDU.Common\CEA_EDU.Common.csproj">
+      <Project>{ef8f4e27-0b9c-4f2b-9609-0504db8c710c}</Project>
+      <Name>CEA_EDU.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CEA_EDU.Domain\CEA_EDU.Domain.csproj">
+      <Project>{29c9c8cc-45c5-47c4-9f82-1a4a277c1ca3}</Project>
+      <Name>CEA_EDU.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dapper\Dapper.csproj">
+      <Project>{4da6306b-b9f0-4e06-aca0-2a1400dd9bd0}</Project>
+      <Name>Dapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\Framework.csproj">
       <Project>{cc84392e-728a-40c7-bf45-c6f83f615c0e}</Project>
