@@ -198,6 +198,7 @@ namespace CEA_CR.PlatForm.ViewModels
                  delegate
                  {
                      lvMain.ItemsSource = DisplayList;
+                     SearchCommand.Execute(null);
                  }
             ));
             lbPageInfo.Dispatcher.Invoke(
