@@ -40,7 +40,7 @@ namespace CEA_CR.PlatForm.Utils
                     }
                 }
 
-                CacheHelper.CacheManager.Set(cacheKey, result, 1000 * 60 * 10);
+                CacheHelper.CacheManager.Set(cacheKey, result, 10);
             }
             return result;
 
@@ -73,7 +73,7 @@ namespace CEA_CR.PlatForm.Utils
                     }
 
                 }
-                CacheHelper.CacheManager.Set(cacheKey, result, 1000 * 60 * 10);
+                CacheHelper.CacheManager.Set(cacheKey, result, 10);
             }
             return result;
         }
