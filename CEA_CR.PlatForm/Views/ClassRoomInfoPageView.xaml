@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CEA_CR.PlatForm.ViewModels"
         xmlns:Event="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         Width="1024" 
-        Height="768" Title="Course" WindowStyle="None" x:Name="w"
+        Height="768" Title="Course" WindowStyle="None" x:Name="w" Topmost="True"
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024">
