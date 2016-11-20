@@ -38,7 +38,6 @@ namespace CEA_CR.PlatForm
             this.StudentPart.ButtonClick += StudentPart_ButtonClick;
             this.CompusPart.ButtonClick += CompusPart_ButtonClick;
             this.CompanyPart.ButtonClick += CompanyPart_ButtonClick;
-
         }
 
         void CoursePart_ButtonClick(object sender, RoutedEventArgs e)

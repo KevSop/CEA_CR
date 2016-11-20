@@ -224,6 +224,7 @@ namespace CEA_CR.PlatForm.ViewModels
                     searchCommand = new DelegateCommand(delegate()
                     {
                         Framework.SearchBoxStudent sb = new Framework.SearchBoxStudent();
+                        sb.Topmost = true;
                         if (sb.ShowDialog().Value)
                         {
                             List<StudentInfoVModel> searchResult = new List<StudentInfoVModel>();
