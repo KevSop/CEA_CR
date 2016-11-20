@@ -230,7 +230,7 @@ namespace CEA_CR.PlatForm.ViewModels
                             //searchResult.Add(new StudentInfoVModel { CourseName="查询出来的课程", ClassRoom = "阶梯教室", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbStudentInfo = new StudentInfo { Name = sb.StudentSearch } });
                             //此处调用查询接口查询结果
                             HttpDataService service = new HttpDataService();
-                            List<CourseScheduleResponse> currentCourse = service.GetCourseSchedule(sb.StudentSearch, sb.StartValue.ToString("yyyy-MM-dd"), "学生", "1");
+                            List<CourseScheduleResponse> currentCourse = service.GetCourseSchedule(sb.StudentSearch, sb.StartValue.ToString("yyyyMM"), "学生", "1");
                             foreach (var item in currentCourse)
                             {
                                 searchResult.Add(new StudentInfoVModel { info = item });

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace CEA_CR.PlatForm.Utils
@@ -19,9 +21,29 @@ namespace CEA_CR.PlatForm.Utils
             return result;
             #endregion
 
-            string responseJson = HttpHelper.GetHttpResponse(string.Format(ConfigStatic.GetCurrentCourseUrl, ConfigStatic.userName, ConfigStatic.password, classRoomId));
-            result = JsonConvert.DeserializeObject<List<CurrentCourseResponse>>(responseJson);
+            string cacheKey = string.Format("course:{0}", classRoomId);
+            result = CacheHelper.CacheManager.Get<List<CurrentCourseResponse>>(cacheKey);
+            if (result == null)
+            {
+                string responseJson = HttpHelper.GetHttpResponse(string.Format(ConfigStatic.GetCurrentCourseUrl, ConfigStatic.userName, ConfigStatic.password, classRoomId));
+
+                if (true)
+                {
+                    result = JsonConvert.DeserializeObject<List<CurrentCourseResponse>>(responseJson);
+                }
+                else
+                {
+                    using (StringReader rdr = new StringReader(responseJson))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(List<CurrentCourseResponse>));
+                        result = (List<CurrentCourseResponse>)serializer.Deserialize(rdr);
+                    }
+                }
+
+                CacheHelper.CacheManager.Set(cacheKey, result, 1000 * 60 * 10);
+            }
             return result;
+
         }
         public List<CourseScheduleResponse> GetCourseSchedule(string identityCard, string month, string userType, string pageNumber)
         {
@@ -32,10 +54,30 @@ namespace CEA_CR.PlatForm.Utils
             return result;
             #endregion
 
-            string responseJson = HttpHelper.GetHttpResponse(string.Format(ConfigStatic.GetCourseScheduleUrl, ConfigStatic.userName, ConfigStatic.password, identityCard, month, userType, pageNumber));
-            result = JsonConvert.DeserializeObject<List<CourseScheduleResponse>>(responseJson);
+            string cacheKey = string.Format("schedule:{0}-{1}-{2}", identityCard, month, userType);
+            result = CacheHelper.CacheManager.Get<List<CourseScheduleResponse>>(cacheKey);
+            if (result == null)
+            {
+                string responseJson = HttpHelper.GetHttpResponse(string.Format(ConfigStatic.GetCourseScheduleUrl, ConfigStatic.userName, ConfigStatic.password, identityCard, month, userType, pageNumber));
+                if (true)
+                {
+
+                    result = JsonConvert.DeserializeObject<List<CourseScheduleResponse>>(responseJson);
+                }
+                else
+                {
+                    using (StringReader rdr = new StringReader(responseJson))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(List<CourseScheduleResponse>));
+                        result = (List<CourseScheduleResponse>)serializer.Deserialize(rdr);
+                    }
+
+                }
+                CacheHelper.CacheManager.Set(cacheKey, result, 1000 * 60 * 10);
+            }
             return result;
         }
+
     }
 
     public class CurrentCourseResponse
@@ -57,4 +99,5 @@ namespace CEA_CR.PlatForm.Utils
         public string time { get; set; }
         public string place { get; set; }
     }
+
 }
