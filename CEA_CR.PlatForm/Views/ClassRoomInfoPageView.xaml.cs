@@ -24,6 +24,11 @@ namespace CEA_CR.PlatForm.Views
         {
             InitializeComponent();
             this.DataContext = new ClassRoomInfoPageViewModel();
+
+            if (System.Configuration.ConfigurationManager.AppSettings["IsDev"] == "true")
+            {
+                this.Topmost = false;
+            }
         }
     }
 }

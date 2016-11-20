@@ -29,6 +29,10 @@ namespace CEA_CR.PlatForm.Views
         {
             InitializeComponent();
 
+            if (System.Configuration.ConfigurationManager.AppSettings["IsDev"] == "true")
+            {
+                this.Topmost = false;
+            }
 
             SchoolInfoEntity schoolInfoEntity = null;
 
