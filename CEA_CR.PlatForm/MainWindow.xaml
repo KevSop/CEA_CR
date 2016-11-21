@@ -10,12 +10,12 @@
         <Viewbox Stretch="Fill">
             <Grid Width="1000">
                 <TextBlock Text="东航多媒体查询系统" Margin="420,20,0,0" FontSize="20" />
-                <Framework:DishesButton x:Name="CompanyPart" HorizontalAlignment="Left" Margin="300,80,0,0" VerticalAlignment="Top" DishesName="公司介绍"/>
+                <Framework:DishesButton x:Name="CompanyPart" HorizontalAlignment="Left" Margin="300,70,0,0" VerticalAlignment="Top" DishesName="公司介绍"/>
 
-                <Framework:DishesButton x:Name="CompusPart" HorizontalAlignment="Left" Margin="600,80,0,0" VerticalAlignment="Top" DishesName="校园介绍"/>
+                <Framework:DishesButton x:Name="CompusPart" HorizontalAlignment="Left" Margin="600,70,0,0" VerticalAlignment="Top" DishesName="校园介绍"/>
                 <Framework:DishesButton x:Name="RoomPart" HorizontalAlignment="Left" Margin="150,240,0,0" VerticalAlignment="Top" DishesName="教室查询"/>
-                <Framework:DishesButton x:Name="TeacherPart" HorizontalAlignment="Left" Margin="450,240,0,40" VerticalAlignment="Top" DishesName="教师查询"/>
-                <Framework:DishesButton x:Name="StudentPart" HorizontalAlignment="Left" Margin="750,240,0,40" VerticalAlignment="Top" DishesName="学员查询"/>
+                <Framework:DishesButton x:Name="TeacherPart" HorizontalAlignment="Left" Margin="450,240,0,50" VerticalAlignment="Top" DishesName="教师查询"/>
+                <Framework:DishesButton x:Name="StudentPart" HorizontalAlignment="Left" Margin="750,240,0,50" VerticalAlignment="Top" DishesName="学员查询"/>
             </Grid>
         </Viewbox>
     </Grid>
