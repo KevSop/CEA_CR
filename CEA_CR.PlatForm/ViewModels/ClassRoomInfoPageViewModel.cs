@@ -197,8 +197,19 @@ namespace CEA_CR.PlatForm.ViewModels
             new Action(
                  delegate
                  {
-                     lvMain.ItemsSource = DisplayList;
-                     SearchCommand.Execute(null);
+                     try
+                     {
+                         lvMain.ItemsSource = DisplayList;
+                         SearchCommand.Execute(null);
+                     }
+                     catch (Exception ex)
+                     {
+                         Framework.MessageBox mb = new Framework.MessageBox();
+                         mb.Topmost = true;
+                         mb.Title = "异常提示";
+                         mb.Message = ex.Message;
+                         mb.ShowDialog();
+                     }
                  }
             ));
             lbPageInfo.Dispatcher.Invoke(
@@ -232,9 +243,12 @@ namespace CEA_CR.PlatForm.ViewModels
                             //此处过滤查询 Mark todo
                             HttpDataService service = new HttpDataService();
                             List<CurrentCourseItem> currentCourse = service.GetCurrentCourse(sb.RoomSearch);
-                            foreach (var item in currentCourse)
+                            if (currentCourse != null)
                             {
-                                searchResult.Add(new ClassRoomInfoVModel { info = item });
+                                foreach (var item in currentCourse)
+                                {
+                                    searchResult.Add(new ClassRoomInfoVModel { info = item });
+                                }
                             }
                             //searchResult.Add(new ClassRoomInfoVModel { CourseName = "搜索课程", TeacherName = "王小六", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbClassRoomInfo = new ClassRoomInfo { Name = sb.RoomSearch } });
                             //此处调用查询接口查询结果

@@ -197,8 +197,19 @@ namespace CEA_CR.PlatForm.ViewModels
             new Action(
                  delegate
                  {
-                     lvMain.ItemsSource = DisplayList;
-                     SearchCommand.Execute(null);
+                     try
+                     {
+                         lvMain.ItemsSource = DisplayList;
+                         SearchCommand.Execute(null);
+                     }
+                     catch (Exception ex)
+                     {
+                         Framework.MessageBox mb = new Framework.MessageBox();
+                         mb.Topmost = true;
+                         mb.Title = "异常提示";
+                         mb.Message = ex.Message;
+                         mb.ShowDialog();
+                     }
                  }
             ));
             lbPageInfo.Dispatcher.Invoke(
@@ -233,9 +244,12 @@ namespace CEA_CR.PlatForm.ViewModels
                             //此处调用查询接口查询结果
                             HttpDataService service = new HttpDataService();
                             List<CourseScheduleItem> currentCourse = service.GetCourseSchedule(sb.StudentSearch, sb.StartValue.ToString("yyyy-MM"), "1");
-                            foreach (var item in currentCourse)
+                            if (currentCourse != null)
                             {
-                                searchResult.Add(new StudentInfoVModel { info = item });
+                                foreach (var item in currentCourse)
+                                {
+                                    searchResult.Add(new StudentInfoVModel { info = item });
+                                }
                             }
                             studentInfoPageModel.ResetData(searchResult);
                             _currentPage = 1;
