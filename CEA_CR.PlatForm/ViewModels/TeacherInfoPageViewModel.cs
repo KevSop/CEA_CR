@@ -53,7 +53,7 @@ namespace CEA_CR.PlatForm.ViewModels
                 if (_currentObject == null)
                 {
                     _currentObject = new TeacherInfoVModel();
-                    _currentObject.info = new CourseScheduleResponse();
+                    _currentObject.info = new CourseScheduleItem();
                     //_currentObject.tbTeacherInfo = new TeacherInfo();
                 }
                 return _currentObject;
@@ -232,7 +232,7 @@ namespace CEA_CR.PlatForm.ViewModels
                             //searchResult.Add(new TeacherInfoVModel { ClassRoom = "阶梯教室", CourseName = "查询课程", StartTime = "2016-01-01 09:30", EndTime = "2016-01-01 11:30", tbTeacherInfo = new TeacherInfo { Name = sb.TeacherSearch } });
                             //此处调用查询接口查询结果
                             HttpDataService service = new HttpDataService();
-                            List<CourseScheduleResponse> currentCourse = service.GetCourseSchedule(sb.TeacherSearch, sb.StartValue.ToString("yyyyMM"), "老师", "1");
+                            List<CourseScheduleItem> currentCourse = service.GetCourseSchedule(sb.TeacherSearch, sb.StartValue.ToString("yyyy-MM"), "2");
                             foreach (var item in currentCourse)
                             {
                                 searchResult.Add(new TeacherInfoVModel { info = item });
@@ -260,6 +260,11 @@ namespace CEA_CR.PlatForm.ViewModels
                 {
                     closeCommand = new DelegateCommand<Window>(w =>
                     {
+                        teacherInfoPageModel.ResetData(new List<TeacherInfoVModel>());
+                        _currentPage = 1;
+                        lvMain.ItemsSource = DisplayList;
+                        lbPageInfo.Content = "当前第1页，共1页";
+
                         w.Close();
                     });
                 }
@@ -286,8 +291,8 @@ namespace CEA_CR.PlatForm.ViewModels
                             {
                                 CurrentObject.info.courseName = t.courseName;
                                 Framework.MessageBox mb = new Framework.MessageBox();
-                                mb.Title = CurrentObject.info.courseName;
-                                mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time + ", 开课地点：" + t.place;
+                                mb.Title = "课程明细";
+                                mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time + ", 开课地点：" + t.place + ", 教室编号：" + t.roomNo;
                                 mb.Topmost = true;
                                 mb.ShowDialog();
                             }

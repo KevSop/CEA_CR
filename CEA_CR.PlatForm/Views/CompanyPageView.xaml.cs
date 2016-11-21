@@ -43,7 +43,7 @@ namespace CEA_CR.PlatForm.Views
             catch (Exception ex)
             {
                 Framework.MessageBox mb = new Framework.MessageBox();
-                mb.Title = "错误提示";
+                mb.Title = "异常提示";
                 mb.Message = "数据获取出错, 错误信息:" + ex.Message;
                 mb.Topmost = true;
                 mb.ShowDialog();

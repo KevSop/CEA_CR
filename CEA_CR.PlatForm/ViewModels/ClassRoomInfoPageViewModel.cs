@@ -53,7 +53,7 @@ namespace CEA_CR.PlatForm.ViewModels
                 if (_currentObject == null)
                 {
                     _currentObject = new ClassRoomInfoVModel();
-                    _currentObject.info = new CurrentCourseResponse();
+                    _currentObject.info = new CurrentCourseItem();
                     //_currentObject.tbClassRoomInfo = new ClassRoomInfo();
                 }
                 return _currentObject;
@@ -231,7 +231,7 @@ namespace CEA_CR.PlatForm.ViewModels
                             List<ClassRoomInfoVModel> searchResult = new List<ClassRoomInfoVModel>();
                             //此处过滤查询 Mark todo
                             HttpDataService service = new HttpDataService();
-                            List<CurrentCourseResponse> currentCourse = service.GetCurrentCourse(sb.RoomSearch);
+                            List<CurrentCourseItem> currentCourse = service.GetCurrentCourse(sb.RoomSearch);
                             foreach (var item in currentCourse)
                             {
                                 searchResult.Add(new ClassRoomInfoVModel { info = item });
@@ -262,6 +262,11 @@ namespace CEA_CR.PlatForm.ViewModels
                 {
                     closeCommand = new DelegateCommand<Window>(w =>
                     {
+                        classRoomInfoPageModel.ResetData(new List<ClassRoomInfoVModel>());
+                        _currentPage = 1;
+                        lvMain.ItemsSource = DisplayList;
+                        lbPageInfo.Content = "当前第1页，共1页";
+
                         w.Close();
                     });
                 }
@@ -292,7 +297,7 @@ namespace CEA_CR.PlatForm.ViewModels
                                 //CurrentObject.tbClassRoomInfo.Name = t.Name;
                                 Framework.MessageBox mb = new Framework.MessageBox();
                                 //mb.Title = CurrentObject.tbClassRoomInfo.Name;
-                                mb.Title = CurrentObject.info.courseName;
+                                mb.Title = "课程明细";
                                 mb.Message = "班级名称：" + t.className + ", 课程名称：" + t.courseName + ", 开课时间：" + t.time;
                                 mb.Topmost = true;
                                 mb.ShowDialog();

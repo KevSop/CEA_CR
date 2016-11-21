@@ -15,7 +15,7 @@ namespace CEA_CR.PlatForm.Models
 {
     public class TeacherInfoVModel : NotificationObject
     {
-        public CourseScheduleResponse info { get; set; }
+        public CourseScheduleItem info { get; set; }
     }
 
     //页面对象

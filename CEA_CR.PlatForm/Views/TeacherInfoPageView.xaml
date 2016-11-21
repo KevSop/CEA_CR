@@ -45,13 +45,13 @@
                 <ListView.View>
                     <GridView>
 
-                        <GridViewColumn Width="142" Header="课程编号" DisplayMemberBinding="{Binding Path= info.courseId}" my:ListViewBehavior.SortField="info.courseId"></GridViewColumn>
-                        <GridViewColumn Width="142" Header="课程名称" DisplayMemberBinding="{Binding Path= info.courseName}" my:ListViewBehavior.SortField="info.courseName"></GridViewColumn>
-                        <GridViewColumn Width="142" Header="班级编号" DisplayMemberBinding="{Binding Path= info.classId}" my:ListViewBehavior.SortField="info.classId"></GridViewColumn>
-                        <GridViewColumn Width="142" Header="班级名称" DisplayMemberBinding="{Binding Path= info.className}" my:ListViewBehavior.SortField="info.className"></GridViewColumn>
-                        <GridViewColumn Width="143" Header="课程日期" DisplayMemberBinding="{Binding Path= info.t_date}" my:ListViewBehavior.SortField="info.t_date"></GridViewColumn>
-                        <GridViewColumn Width="143" Header="授课时间" DisplayMemberBinding="{Binding Path= info.time}" my:ListViewBehavior.SortField="info.time"></GridViewColumn>
-                        <GridViewColumn Width="143" Header="授课地点" DisplayMemberBinding="{Binding Path= info.place}" my:ListViewBehavior.SortField="info.place"></GridViewColumn>
+                        <GridViewColumn Width="120" Header="课程编号" DisplayMemberBinding="{Binding Path= info.courseId}" my:ListViewBehavior.SortField="info.courseId"></GridViewColumn>
+                        <GridViewColumn Width="200" Header="课程名称" DisplayMemberBinding="{Binding Path= info.courseName}" my:ListViewBehavior.SortField="info.courseName"></GridViewColumn>
+                        <GridViewColumn Width="120" Header="班级编号" DisplayMemberBinding="{Binding Path= info.classId}" my:ListViewBehavior.SortField="info.classId"></GridViewColumn>
+                        <GridViewColumn Width="187" Header="班级名称" DisplayMemberBinding="{Binding Path= info.className}" my:ListViewBehavior.SortField="info.className"></GridViewColumn>
+                        <GridViewColumn Width="120" Header="课程日期" DisplayMemberBinding="{Binding Path= info.t_date}" my:ListViewBehavior.SortField="info.t_date"></GridViewColumn>
+                        <GridViewColumn Width="120" Header="授课时间" DisplayMemberBinding="{Binding Path= info.time}" my:ListViewBehavior.SortField="info.time"></GridViewColumn>
+                        <GridViewColumn Width="130" Header="授课地点" DisplayMemberBinding="{Binding Path= info.place}" my:ListViewBehavior.SortField="info.place"></GridViewColumn>
 
                     </GridView>
                 </ListView.View>

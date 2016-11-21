@@ -17,7 +17,7 @@ namespace CEA_CR.PlatForm.Models
     //原始库里的对象转换成前台要看的对象
     public class ClassRoomInfoVModel : NotificationObject
     {
-        public CurrentCourseResponse info { get; set; }
+        public CurrentCourseItem info { get; set; }
     }
 
     //页面对象

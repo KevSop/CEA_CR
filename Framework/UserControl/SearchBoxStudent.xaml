@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock Text="搜索条件" Name="txtTitle" Padding="10,8,0,0" Background="#FFEEE7DE" Grid.Row="0" Grid.Column="0" FontFamily="Microsoft YaHei" FontSize="24" Foreground="#FF675446" />
         <Button Grid.Row="0" Grid.Column="1" Background="#FFEEE7DE" BorderThickness="0" Click="btnClose_Click" Style="{DynamicResource ResourceKey=ColsedButtonStyle}" Name="btnClose" />
-        <my:UserTextBox Grid.Row="1" HorizontalAlignment="Center" Margin="98,43,48,0" x:Name="txtStudentValue"   VerticalAlignment="Top" UserLblText="身份证号">
+        <my:UserTextBox Grid.Row="1" HorizontalAlignment="Center" Margin="98,43,48,0" x:Name="txtStudentValue" VerticalAlignment="Top" UserLblText="身份证/编号">
             <Event:Interaction.Triggers>
                 <Event:EventTrigger EventName="GotFocus">
                     <Event:InvokeCommandAction Command="{Binding GotFocusCommand}" CommandParameter="{Binding ElementName=Keyboard}" />
