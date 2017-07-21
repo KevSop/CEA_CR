@@ -24,6 +24,7 @@ namespace CEA_CR.PlatForm
         public MainWindow()
         {
             InitializeComponent();
+
             //this.CoursePart.ImageSource = new BitmapImage(new Uri("book-icon.png", UriKind.Relative));  //先将图片右键生成操作设置成resource
             this.TeacherPart.ImageSource = new BitmapImage(new Uri("teachers.png", UriKind.Relative));
             this.RoomPart.ImageSource = new BitmapImage(new Uri("school.png", UriKind.Relative));
@@ -38,6 +39,8 @@ namespace CEA_CR.PlatForm
             this.StudentPart.ButtonClick += StudentPart_ButtonClick;
             this.CompusPart.ButtonClick += CompusPart_ButtonClick;
             this.CompanyPart.ButtonClick += CompanyPart_ButtonClick;
+
+            imageWX.Source = new BitmapImage(new Uri("Images/wxgzh.jpg", UriKind.Relative));
 
             if (System.Configuration.ConfigurationManager.AppSettings["IsDev"] == "true")
             {

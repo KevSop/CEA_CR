@@ -207,6 +207,7 @@
     <Content Include="Lib\log4net.xml" />
     <Content Include="Lib\System.Windows.Interactivity.dll" />
     <Resource Include="UserControl\company2.jpg" />
+    <Resource Include="UserControl\company1.jpg" />
     <Resource Include="UserControl\company.jpg" />
     <Resource Include="UserControl\company1.png" />
     <Resource Include="UserControl\students.jpg" />

@@ -219,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\sky.png" />
+    <Resource Include="Images\wxgzh.jpg" />
     <Content Include="Lib\Castle.DynamicProxy.dll" />
     <Resource Include="Lib\Castle.DynamicProxy.license.txt" />
     <Content Include="Lib\fastJSON.dll" />
