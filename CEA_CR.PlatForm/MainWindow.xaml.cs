@@ -31,7 +31,7 @@ namespace CEA_CR.PlatForm
 
             this.StudentPart.ImageSource = new BitmapImage(new Uri("students.jpg", UriKind.Relative));
             this.CompusPart.ImageSource = new BitmapImage(new Uri("university.jpg", UriKind.Relative));
-            this.CompanyPart.ImageSource = new BitmapImage(new Uri("company2.jpg", UriKind.Relative));
+            this.CompanyPart.ImageSource = new BitmapImage(new Uri("company.jpg", UriKind.Relative));
 
             //this.CoursePart.ButtonClick += CoursePart_ButtonClick;
             this.RoomPart.ButtonClick += RoomPart_ButtonClick;
